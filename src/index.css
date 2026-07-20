@@ -1,0 +1,83 @@
+@import '@fontsource/bricolage-grotesque/500.css';
+@import '@fontsource/bricolage-grotesque/600.css';
+@import '@fontsource/bricolage-grotesque/700.css';
+@import '@fontsource/karla/400.css';
+@import '@fontsource/karla/500.css';
+@import '@fontsource/karla/600.css';
+@import '@fontsource/karla/700.css';
+@import '@fontsource/newsreader/400.css';
+@import '@fontsource/newsreader/500.css';
+@import '@fontsource/newsreader/400-italic.css';
+@import '@fontsource/spline-sans-mono/400.css';
+@import '@fontsource/spline-sans-mono/500.css';
+@import '@fontsource/spline-sans-mono/600.css';
+
+:root {
+  --accent: oklch(0.72 0.15 40);
+  --accent-2: oklch(0.78 0.13 65);
+  --accent-gradient: linear-gradient(135deg, oklch(0.78 0.13 65), oklch(0.72 0.15 40));
+  --accent-tint: oklch(0.95 0.04 55);
+  --canvas: oklch(0.985 0.012 70);
+  --card: #ffffff;
+  --card-border: oklch(0.94 0.02 65);
+  --ink: oklch(0.28 0.03 55);
+  --ink-strong: oklch(0.26 0.03 55);
+  --muted: oklch(0.55 0.03 55);
+  --tab-inactive: oklch(0.60 0.02 55);
+  --prompt-ink: oklch(0.29 0.03 55);
+
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Karla', sans-serif;
+  --font-serif: 'Newsreader', serif;
+  --font-mono: 'Spline Sans Mono', monospace;
+
+  --shadow-card: 0 10px 30px -14px rgba(120,60,20,0.35);
+  --shadow-button: 0 8px 18px -8px oklch(0.6 0.15 40);
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { height: 100%; }
+
+body {
+  background: var(--canvas);
+  font-family: var(--font-body);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+a { color: inherit; text-decoration: none; }
+
+input, textarea {
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+.press {
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+.press:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
