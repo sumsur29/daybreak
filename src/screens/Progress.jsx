@@ -1,5 +1,4 @@
 import Screen from '../components/Screen'
-import TabBar from '../components/TabBar'
 import { useStore } from '../state/store'
 import { IconFlame, IconCheck } from '../icons/Icons'
 
@@ -115,10 +114,7 @@ export default function Progress() {
         <StatTile value={stats.pieces} label="Pieces" />
         <StatTile value={stats.words} label="Words" />
         <StatTile value={stats.lessons} label="Lessons" />
-      </div>
-
-      <TabBar />
-    </Screen>
+      </div>    </Screen>
   )
 }
 

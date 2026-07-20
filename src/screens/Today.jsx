@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
-import TabBar from '../components/TabBar'
 import { useStore } from '../state/store'
 import { sessionContent } from '../data/seed'
 import { IconFeather, IconBook, IconSunRays, IconArrowRight, IconRevisit } from '../icons/Icons'
@@ -212,10 +211,7 @@ export default function Today() {
           </div>
           <span style={{ color: 'var(--accent)', fontSize: 18, fontWeight: 700 }}>→</span>
         </button>
-      )}
-
-      <TabBar />
-    </Screen>
+      )}    </Screen>
   )
 }
 

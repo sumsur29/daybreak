@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
-import TabBar from '../components/TabBar'
 import { useStore } from '../state/store'
 import { IconGear, IconFeather, IconBook, IconCheck } from '../icons/Icons'
 
@@ -140,8 +139,6 @@ export default function You() {
           )
         })}
       </div>
-
-      <TabBar />
     </Screen>
   )
 }

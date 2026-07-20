@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
-import TabBar from '../components/TabBar'
 import { useStore } from '../state/store'
 import { IconFeather, IconBook, IconLock, IconArrowRight } from '../icons/Icons'
 
@@ -126,8 +125,6 @@ export default function Learn() {
           )
         })}
       </div>
-
-      <TabBar />
     </Screen>
   )
 }

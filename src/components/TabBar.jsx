@@ -13,17 +13,13 @@ export default function TabBar() {
   return (
     <nav
       style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        flex: 'none',
         background: '#fff',
         borderTop: '1px solid var(--card-border)',
         padding:
           'calc(env(safe-area-inset-bottom, 0px) * 0.5 + 10px) 18px calc(env(safe-area-inset-bottom, 0px) * 0.5 + 10px)',
         display: 'flex',
         justifyContent: 'space-between',
-        zIndex: 20,
       }}
     >
       {tabs.map(({ to, label, Icon, end }) => (
