@@ -19,7 +19,7 @@ export default function TabBar() {
         right: 0,
         background: '#fff',
         borderTop: '1px solid var(--card-border)',
-        padding: '12px 18px calc(env(safe-area-inset-bottom, 0px) + 14px)',
+        padding: 'calc(env(safe-area-inset-bottom, 0px) * 0.5 + 10px) 18px calc(env(safe-area-inset-bottom, 0px) * 0.5 + 10px)',
         display: 'flex',
         justifyContent: 'space-between',
         zIndex: 20,
