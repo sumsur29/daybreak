@@ -905,6 +905,1128 @@ export const lessonContent = {
       },
     ],
   },
+  "ssc-1": {
+    title: "Starting mid-scene",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "A story that opens with backstory asks for patience it hasn't earned. Open in motion, and the reader has no choice but to lean in.",
+        minutes: 7,
+        sections: ["The cold open", "In medias res", "Cutting throat-clearing", "The stake test", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Start where it's already happening",
+        body: [
+          "A story that opens by explaining — who this is, how they got here, what led to today — is asking the reader to wait before anything grabs them. Opening mid-action asks for nothing: the reader is dropped into motion and has to catch up, which is a far stickier kind of attention.",
+          "You can fold in the 'why' later, once the reader is hooked on the 'what.' Curiosity about how someone got into this moment is a stronger engine than a tidy explanation delivered up front.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The technique has a name",
+        text: "In medias res — 'into the middle of things.' Enter late, explain little, and let the reader assemble the backstory from motion.",
+      },
+      {
+        type: "compare",
+        heading: "Two openings, same story",
+        left: {
+          label: "Backstory first",
+          lines: [
+            "Maya had always hated hospitals. Ever since she was a child, the smell of them made her uneasy, and now, at thirty-four, driving to see her father, she felt that old dread return.",
+          ],
+        },
+        right: {
+          label: "Mid-scene",
+          lines: [
+            "The nurse said two minutes. Maya had driven four hours for two minutes.",
+          ],
+        },
+        caption: "The left version explains her feelings before we care. The right drops us into a ticking clock and a four-hour drive — we feel the dread instead of being told about it, and we want to know why.",
+      },
+      {
+        type: "concept",
+        heading: "It forces you to cut throat-clearing",
+        body: [
+          "Beyond drama, starting mid-scene kills the warm-up paragraph — the character waking up, making coffee, thinking about their day before the story starts. That paragraph almost never survives a real edit anyway.",
+          "So starting past it saves you from writing scaffolding you'll only delete later. If you find your first paragraph is someone getting ready for the day, the story probably starts in your second or third.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "The one thing a cold open needs",
+        body: [
+          "Mid-scene fails when the reader is disoriented with no reason to care. The fix isn't more explanation — it's a clear, physical stake inside the scene itself: someone wants something, right now, and something is in the way.",
+          "Give the reader a want and an obstacle in the first lines, and they'll happily wait for the context. Withhold both, and no amount of backstory will save it.",
+        ],
+      },
+      {
+        type: "example",
+        heading: "A cold open with a built-in stake",
+        variant: 'prose',
+        lines: [
+          "\"Don't,\" she said, but he was already dialing.",
+          "Forty seconds. That was how long it would take his mother to answer, and how long Ana had to decide whether the truth was worth what it would cost.",
+        ],
+        caption: "We know nothing about these people — and we don't need to. A want (stop the call), an obstacle (he's already dialing), a clock (forty seconds). The backstory can wait; the tension can't.",
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "Opening with backstory asks for patience the story hasn't earned.",
+          "In medias res drops the reader into motion and hooks curiosity.",
+          "Starting mid-scene cuts the warm-up paragraph you'd delete anyway.",
+          "A cold open needs a want, an obstacle, and ideally a clock.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Write the opening of a story that begins in the middle of an action already underway — a decision being made, a door closing. No backstory. Make sure a want and an obstacle are visible in the first two sentences.",
+      },
+    ],
+  },
+  "ssc-2": {
+    title: "Building a single scene",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "A scene is one continuous moment rendered close to real time — not a summary of events. Knowing the difference is the core of pacing.",
+        minutes: 7,
+        sections: ["Scene vs. summary", "The shape of a scene", "When to use which", "The half-scene", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Scene shows; summary tells",
+        body: [
+          "A scene is one continuous moment, in one place, unfolding roughly at the pace a character would live it. Summary compresses time and reports what happened. Both are necessary — but they do opposite jobs, and beginners often summarize the moments that deserve a scene.",
+          "The clearest tell that you've slipped into summary is a phrase like 'over the next few weeks' or 'they spent the summer.' That's fine for bridging — but the moments that carry your story's weight should be lived, not summarized past.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The core distinction",
+        text: "Summary covers ground. Scene makes the reader stand on it. Save your scenes for the ground that matters.",
+      },
+      {
+        type: "compare",
+        heading: "The same event, both modes",
+        left: {
+          label: "Summary",
+          lines: [
+            "They argued about the money again, and eventually she left.",
+          ],
+        },
+        right: {
+          label: "Scene",
+          lines: [
+            "\"It's not about the money,\" she said, though it was. He watched her pull her coat off the hook, one arm, then the other, taking her time, giving him every chance to say the thing. He didn't. The door clicked.",
+          ],
+        },
+        caption: "Summary tells you they argued. The scene lets you watch her put on the coat one arm at a time, waiting for him to speak. You feel the failure in real time — that's what a scene buys you.",
+      },
+      {
+        type: "concept",
+        heading: "A scene has its own small arc",
+        body: [
+          "A strong scene isn't just a moment — it has a shape. It opens with someone wanting something, moves through friction or obstacle, and closes on a shift: something is different at the end than at the start, even subtly.",
+          "If a scene ends in exactly the same place it began — no change in knowledge, feeling, or situation — ask whether it needs to be a scene at all, or whether a line of summary would do.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "The half-scene: a middle gear",
+        body: [
+          "Between full scene and pure summary sits a useful third gear: the half-scene. It's mostly summary, but it pauses for one vivid, dramatized beat — a scrap of dialogue, a single sharp detail — before pulling back out.",
+          "Use it when a moment matters somewhat, but not enough for a full scene. It grounds a stretch of summary in one concrete instant, so the reader stays connected without you spending a whole scene's worth of space.",
+        ],
+      },
+      {
+        type: "example",
+        heading: "A half-scene in action",
+        variant: 'prose',
+        lines: [
+          "The trial dragged on for weeks. Witnesses came and went, the lawyers circled, and Ellen stopped expecting anything to change.",
+          "Only once did it break through — when the boy pointed at her father and said, quietly, \"That's him,\" and the whole room seemed to inhale.",
+          "Then the machinery resumed, and the weeks closed over the moment again.",
+        ],
+        caption: "Weeks of summary bracket a single dramatized beat — the boy's 'That's him.' The half-scene lets you compress time while still giving the reader one moment to actually stand in.",
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "A scene is one continuous moment in near-real time; summary compresses.",
+          "Save full scenes for the moments that carry weight.",
+          "A good scene has a small arc — something shifts by the end.",
+          "The half-scene grounds summary with one dramatized beat.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Take a moment you'd normally summarize ('they made up the next day') and write it as a full scene — real-time, with dialogue and physical detail. Then notice what the scene reveals that the summary hid.",
+      },
+    ],
+  },
+  "ssc-3": {
+    title: "Dialogue that carries plot",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "Dialogue that only trades information is dead weight. The best dialogue reveals character while something is also shifting underneath.",
+        minutes: 7,
+        sections: ["Two jobs at once", "Subtext", "The rhythm of speech", "The voice test", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Good dialogue works two jobs at once",
+        body: [
+          "Dialogue that just exchanges facts — 'How was your day?' 'Fine.' — is dead weight unless something else is happening under it. Strong dialogue reveals who a person is through how they speak, while the scene itself is shifting or being decided.",
+          "Ask of every exchange: is this only moving information, or is it also revealing character and changing the situation? If it's only information, it can usually be cut or compressed into a line of narration.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "Subtext: what isn't said",
+        body: [
+          "People rarely say exactly what they mean, especially under pressure. Subtext — the meaning under the words — usually carries more than the literal line. A character who changes the subject when asked a direct question tells you more than one who answers.",
+          "The strongest dialogue often has two conversations running at once: the words on the surface, and the real exchange happening underneath. Let characters dodge, deflect, and imply.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The core idea",
+        text: "On-the-nose dialogue says what it means. Real dialogue means more than it says. Write the second kind.",
+      },
+      {
+        type: "compare",
+        heading: "On the nose vs. subtext",
+        left: {
+          label: "On the nose",
+          lines: [
+            "\"I'm angry that you forgot our anniversary and I feel unappreciated.\"",
+          ],
+        },
+        right: {
+          label: "Subtext",
+          lines: [
+            "\"There's cake in the fridge,\" she said. \"It was on sale.\" She didn't look up. \"Half price.\"",
+          ],
+        },
+        caption: "The left states the feeling outright — flat and unreal. The right never names the hurt, but the cake, the not-looking-up, the 'half price' carry it completely. The reader does the work, which is why it lands.",
+      },
+      {
+        type: "concept",
+        heading: "Speech has rhythm — and it's not tidy",
+        body: [
+          "Real speech is full of interruption, fragments, and things left unfinished. Grammatically perfect, complete dialogue often reads as stiff, because people don't talk that way — especially when upset, distracted, or hiding something.",
+          "Let characters cut each other off. Let sentences trail. Let someone answer a question that wasn't asked. The mess is what makes it sound like a person instead of a script.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "The voice test",
+        body: [
+          "One quick check for whether a line earns its place: could a completely different character say the exact same line without it feeling wrong? If yes, the dialogue isn't specific enough to this character yet — it's just plot information in quotation marks.",
+          "Great dialogue is inseparable from the person saying it. The word choice, the rhythm, what they avoid — all of it should belong to one character and no one else.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "Dialogue should reveal character AND move the scene, not just inform.",
+          "Subtext — what's left unsaid — usually carries the most weight.",
+          "Real speech is messy: fragments, interruptions, dodges.",
+          "If any character could say the line, it's not specific enough.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Write a short exchange where one character is upset but never says so directly. Let the feeling show through what they choose to talk about instead. No character may name their emotion.",
+      },
+    ],
+  },
+  "ssc-4": {
+    title: "The unreliable detail",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "One specific, slightly odd detail tells the reader more than a paragraph of description — because specificity is what earns their trust.",
+        minutes: 6,
+        sections: ["Specificity earns trust", "The odd detail", "Restraint", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "The specific beats the general",
+        body: [
+          "A single precise, slightly unusual detail — a man who reads every ingredient label before eating, a clock nobody's fixed in three years — tells the reader more about a person or place than a full paragraph of general description.",
+          "Vague description ('a nice house,' 'an ordinary day') reads as filler because it could describe anything. One exact, unexpected detail reads as observation — proof the narrator actually looked at this specific world.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "Why it works",
+        text: "A generic detail could be anywhere. A specific one could only be here. Specificity is how a reader decides to trust you.",
+      },
+      {
+        type: "concept",
+        heading: "The best details are slightly off",
+        body: [
+          "The most powerful details often aren't the dramatic ones — they're the small, faintly strange ones that imply a whole history without explaining it. A character noticing the pale band of skin where a wedding ring used to be says more than a paragraph about the divorce.",
+          "Look for the detail that makes the reader lean in and wonder, rather than the one that spells everything out. Implication is stronger than statement.",
+        ],
+      },
+      {
+        type: "compare",
+        heading: "Generic vs. specific",
+        left: {
+          label: "Generic",
+          lines: [
+            "Her apartment was messy and a little sad.",
+          ],
+        },
+        right: {
+          label: "Specific",
+          lines: [
+            "Three mugs of tea sat on the windowsill, each with a full skin of dust, each abandoned at a different week.",
+          ],
+        },
+        caption: "'Messy and sad' tells you how to feel. The three dusty mugs, each from a different week, shows you a person starting things and drifting off — and lets you feel the sadness yourself, which is far sharper.",
+      },
+      {
+        type: "concept",
+        heading: "One detail, not five",
+        body: [
+          "Restraint matters here. One or two precise details land; five in a row become a list, and the reader stops absorbing them individually. Each additional detail dilutes the ones around it.",
+          "Choose the single detail doing the most work and trust it to carry the moment. A paragraph of description usually has one great detail buried in it — cut to that one.",
+        ],
+      },
+      {
+        type: "example",
+        heading: "A detail that implies a whole life",
+        variant: 'prose',
+        lines: [
+          "He kept his dead wife's umbrella by the door, and on clear days, sometimes, he took it anyway.",
+        ],
+        caption: "One sentence, one object, one small odd behavior — and you understand grief, habit, and a kind of quiet loyalty without a single abstract word or a line of backstory. That's the whole power of the specific detail.",
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "One specific detail beats a paragraph of general description.",
+          "The best details are slightly odd and imply a history.",
+          "Specificity is what earns the reader's trust.",
+          "Use one or two great details, not five — restraint sharpens them.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Take a generic description in something you've written ('a busy office,' 'an old car') and replace it with a single specific, slightly odd detail that implies more than it states.",
+      },
+    ],
+  },
+  "ssc-5": {
+    title: "Endings that land",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "A satisfying ending isn't a twist — it's a shift in understanding that was quietly set up earlier, now paying off.",
+        minutes: 7,
+        sections: ["Surprising yet inevitable", "Plant the payoff", "Don't just stop", "Earned ambiguity", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Surprising, then inevitable",
+        body: [
+          "A satisfying ending is rarely a twist for its own sake. It's a shift in understanding that was quietly seeded earlier and only now pays off. The reader should feel surprised, and then — a second later — feel that it was inevitable all along.",
+          "That double beat is the goal: 'I didn't see it coming' immediately followed by 'of course.' A twist with no groundwork gets the first half and fails the second — it surprises, but feels cheap.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The target",
+        text: "The best endings are surprising and inevitable at once. The surprise comes from the reader; the inevitability comes from you, planted pages earlier.",
+      },
+      {
+        type: "concept",
+        heading: "If the ending doesn't land, fix the middle",
+        body: [
+          "When an ending feels unearned, the problem is almost never the ending itself — it's something missing earlier. The fix is to go back and plant the detail, image, or feeling the ending needs to pay off.",
+          "So treat a weak ending as a diagnostic, not a dead end. Ask: what would have to be true earlier for this ending to feel inevitable? Then go plant it.",
+        ],
+      },
+      {
+        type: "compare",
+        heading: "Unearned vs. planted",
+        left: {
+          label: "Twist from nowhere",
+          lines: [
+            "...and then she realized the whole town had known about her father all along. THE END.",
+          ],
+        },
+        right: {
+          label: "Planted earlier",
+          lines: [
+            "(Earlier: neighbors going quiet when she passed; her mother changing the subject.) ...and then she understood the silences. They had always known.",
+          ],
+        },
+        caption: "The left twist arrives from nowhere. The right pays off small moments the reader half-noticed — the quiet neighbors, the dodged questions — so the ending detonates something already sitting there.",
+      },
+      {
+        type: "concept",
+        heading: "An ending that just stops isn't an ending",
+        body: [
+          "Endings that merely stop — where the last sentence just happens to be last — feel incomplete even when the prose is fine. The reader needs to feel something changed: an understanding gained, a question answered, or one deliberately left open.",
+          "Before you end, ask: what is different now? If nothing has shifted — in the character, the situation, or the reader's understanding — the story hasn't ended, it's just paused.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "Ambiguity on purpose vs. by accident",
+        body: [
+          "Open endings can be powerful, but there's a difference between ambiguity that's the point — because uncertainty is the story's truth — and ambiguity because the writer didn't figure out what it was building toward.",
+          "Readers can feel the difference. An earned open ending resonates; an unearned one just feels unfinished. If you end open, make sure the openness is the meaning, not an escape.",
+        ],
+      },
+      {
+        type: "example",
+        heading: "A quiet, planted ending",
+        variant: 'prose',
+        lines: [
+          "(Throughout: he never once called her by her name.)",
+          "At the funeral, he stood, and in front of everyone, he finally said it — her name, just her name — and then sat back down.",
+        ],
+        caption: "Nothing 'happens' — no twist. But the whole story planted his inability to say her name, so the small act of finally saying it lands like a thunderclap. Surprising, inevitable, earned.",
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "Great endings are surprising and then, a beat later, inevitable.",
+          "If an ending feels unearned, fix what's missing earlier.",
+          "An ending must shift something — knowledge, feeling, situation.",
+          "Open endings work only when the openness is the point.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Look at a story's last line. Find one earlier place you could plant a small detail or gesture that the ending pays off. Add it — then the ending should feel inevitable instead of tacked on.",
+      },
+    ],
+  },
+  "ssc-6": {
+    title: "Point of view",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "Who tells the story controls what the reader can know — and what they're kept from knowing is often the story's real engine.",
+        minutes: 8,
+        sections: ["POV is information control", "First person", "Third limited", "Omniscient & objective", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "POV is about what the reader is allowed to know",
+        body: [
+          "Choosing a point of view is really deciding what information the reader gets and how. What a narrator can't or won't tell us creates the gap between what we know and what we want to know — and that gap is one of fiction's most reliable engines of tension.",
+          "So POV isn't a technicality — it's a fundamental choice about intimacy and access. Pick it deliberately, and hold it consistently; the most common beginner error is drifting between viewpoints without meaning to.",
+        ],
+      },
+      {
+        type: "list",
+        heading: "The main points of view",
+        items: [
+          { term: "First person ('I')", text: "Maximum intimacy — we're inside one head — but limited to what that character notices, remembers, or admits. The narrator can be biased or unreliable." },
+          { term: "Third limited ('he/she')", text: "Slightly more distance, still filtered through one character's mind at a time. The most common POV in modern fiction — intimacy plus flexibility." },
+        ],
+      },
+      {
+        type: "list",
+        heading: "Wider lenses",
+        items: [
+          { term: "Omniscient", text: "The narrator knows everything and can enter any mind. Great for large casts and sweep, but shifting between heads too fast disorients the reader." },
+          { term: "Objective / cinematic", text: "Reports only what's observable — action and dialogue, no interiority. Creates cool distance and makes the reader infer everything." },
+        ],
+      },
+      {
+        type: "callout",
+        label: "The core idea",
+        text: "First person hands you a mind. Objective hands you a camera. Everything in between is a dial for how close the reader stands.",
+      },
+      {
+        type: "compare",
+        heading: "The same moment, two POVs",
+        left: {
+          label: "First person",
+          lines: [
+            "I told him I was fine. I was not fine. But there are things you don't say in a kitchen at 7am.",
+          ],
+        },
+        right: {
+          label: "Objective",
+          lines: [
+            "\"I'm fine,\" she said. She turned back to the sink. The tap ran for a while.",
+          ],
+        },
+        caption: "First person lets us hear the lie from inside — we know she's not fine. Objective only shows the words and the running tap, and makes us infer the lie. Same moment; completely different reader experience.",
+      },
+      {
+        type: "concept",
+        heading: "Consistency is the rule that matters most",
+        body: [
+          "Whatever POV you choose, hold it. The jarring error is starting in third limited — locked to one character's knowledge — then suddenly revealing another character's private thoughts. It quietly breaks the reader's trust in the story's rules.",
+          "Establish the POV in the first paragraph or two, and stay within its limits. Consistency is what lets a reader relax into the story instead of tripping over shifting access.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "POV controls what the reader knows — and the gaps create tension.",
+          "First person: intimate but limited and possibly unreliable.",
+          "Third limited: the flexible modern default; omniscient sees all; objective shows only the surface.",
+          "Choose a POV deliberately and hold it consistently.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Take one paragraph you've written and rewrite it in a different POV — first to third, or intimate to objective. Notice what the new lens reveals, and what it hides.",
+      },
+    ],
+  },
+  "ssc-7": {
+    title: "Pacing a short story",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "Pacing isn't speed — it's proportion. You slow down for what matters and compress everything that's just getting you there.",
+        minutes: 7,
+        sections: ["Proportion, not speed", "Scene vs. summary", "Sentence length", "Dialogue and pace", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Pacing is proportion",
+        body: [
+          "Pacing isn't about going fast — it's about proportion. A well-paced story slows down for the moments that matter and compresses the transportation between them. If every moment gets equal weight, nothing feels important.",
+          "So pacing is really a series of decisions about emphasis: where do I linger, where do I hurry? Contrast is what tells the reader which moments to care about.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The core idea",
+        text: "Even pacing flattens a story. Vary it — dwell on what matters, rush what doesn't — and the shape itself tells the reader where to look.",
+      },
+      {
+        type: "concept",
+        heading: "The biggest lever: scene vs. summary",
+        body: [
+          "The largest pacing control is the one from the scene lesson: render pivotal moments as full scenes in near-real time, and compress the connective tissue into brief summary. Too many scenes back to back and the story drags; too much summary and the reader never gets to experience anything.",
+          "Think of summary as the fast-forward between the moments you actually want the reader to live. Alternating the two is most of pacing.",
+        ],
+      },
+      {
+        type: "compare",
+        heading: "Sentence length changes speed",
+        left: {
+          label: "Long — slows down",
+          lines: [
+            "The afternoon stretched on, warm and unhurried, and she let herself sink into the chair, listening to the far-off sound of a mower somewhere down the street, thinking of nothing in particular.",
+          ],
+        },
+        right: {
+          label: "Short — speeds up",
+          lines: [
+            "The door slammed. Glass broke. She ran. Behind her, footsteps — closer now. She didn't look back.",
+          ],
+        },
+        caption: "Long, flowing sentences expand time and slow the pulse. Short, clipped ones accelerate — readers process them faster, and the visual rhythm signals speed before meaning even lands. Match sentence length to the scene's temperature.",
+      },
+      {
+        type: "concept",
+        heading: "Dialogue sets tempo too",
+        body: [
+          "Quick, clipped exchanges read fast and build tension. A long, uninterrupted speech slows everything down — sometimes for good reason, sometimes by accident. If a scene feels sluggish, check whether one character has been talking, uninterrupted, for too long.",
+          "You can tighten a slack scene just by breaking a monologue into a back-and-forth, or loosen a rushed one by letting a character speak at length. Dialogue rhythm is a pacing dial.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "A revision pass for pace",
+        body: [
+          "Go through a draft and mark each stretch 'fast' or 'slow.' Then ask whether the pattern matches the story's emphasis — the emotional peaks slow, the connective tissue fast — or whether it's just steady throughout because you wrote at one default speed.",
+          "Deliberately varied pacing is invisible and powerful. Accidentally uniform pacing is the quiet reason many competent stories feel flat.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "Pacing is proportion — linger on what matters, compress the rest.",
+          "Scene vs. summary is the biggest pacing lever.",
+          "Short sentences accelerate; long sentences slow the reader down.",
+          "Clipped dialogue speeds a scene; long speeches slow it.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Take a tense moment you've written and rewrite it in short, clipped sentences. Then take a calm moment and rewrite it in one long, flowing sentence. Feel how sentence length alone changes the speed.",
+      },
+    ],
+  },
+  "ssc-8": {
+    title: "Cutting what doesn't serve it",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "Every sentence should reveal character, move the plot, or build atmosphere. If it does none of those, it's a candidate to cut — no matter how good it is.",
+        minutes: 7,
+        sections: ["The three jobs", "Leave out the skipped parts", "Suspect your darlings", "The margin pass", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Every sentence needs a job",
+        body: [
+          "In a short story, every sentence should be doing at least one of three things: revealing character, moving the plot, or building atmosphere and setting. A sentence doing none of the three is a candidate to cut, however well-written it is on its own.",
+          "This is what makes short stories feel taut. There's no room for sentences that are merely present. Each one should earn its place by doing a job you can name.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "Leonard's razor",
+        text: "Elmore Leonard said to leave out the parts readers skip. In practice, that's the parts that serve the writer — explaining, showing off — not the reader.",
+      },
+      {
+        type: "concept",
+        heading: "Protect the reader, not your pride",
+        body: [
+          "Writers tend to defend their favorite lines hardest — the clever image, the gorgeous phrase — which is exactly why those deserve the most scrutiny. A beautiful sentence that isn't doing structural work is still, functionally, a detour.",
+          "This is 'kill your darlings,' and it's widely misunderstood. It doesn't mean cut everything good. It means a line has to earn its place by doing a job, not just by being pretty.",
+        ],
+      },
+      {
+        type: "compare",
+        heading: "Before and after the cut",
+        left: {
+          label: "With a darling",
+          lines: [
+            "The rain fell in silver threads against the glass, beautiful and cold, like tiny falling knives catching the streetlight. She picked up the phone.",
+          ],
+        },
+        right: {
+          label: "Cut to the work",
+          lines: [
+            "The rain hit the glass. She picked up the phone.",
+          ],
+        },
+        caption: "The silver-threads-and-knives sentence is pretty — and it stalls the moment. If the scene is about her picking up the phone, the ornate description is a detour. Cutting it doesn't lose the story; it sharpens it.",
+      },
+      {
+        type: "concept",
+        heading: "The margin pass",
+        body: [
+          "A concrete revision method: go through a draft and, in the margin, write one word for each paragraph's job — 'character,' 'plot,' 'mood.' If you can't come up with a word, or two paragraphs in a row share the same job, that's usually where the fat is.",
+          "It sounds mechanical, but it exposes what your instincts miss. The paragraph you can't assign a job to is almost always the one to cut or fold into its neighbor.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "Cutting is where the story sharpens",
+        body: [
+          "Most first drafts are twenty to thirty percent too long — not because the extra is bad, but because it's inert. Cutting it doesn't shrink the story; it concentrates it. The same events hit harder with less around them.",
+          "Trust that removing what doesn't work makes what remains stronger. A short story is defined as much by what you leave out as by what you keep.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "Every sentence should reveal character, move plot, or build mood.",
+          "Leave out the parts that serve the writer, not the reader.",
+          "Suspect your favorite lines hardest — pretty isn't a job.",
+          "Use the margin pass: name each paragraph's job, cut the ones you can't.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Take a page you've written and, for each paragraph, name its job in one word — character, plot, or mood. Find the one you can't name, and cut it. Read the page again.",
+      },
+    ],
+  },
+  "im-1": {
+    title: "Concrete over abstract",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "Abstract words name concepts; concrete words name things a reader can see, touch, and remember. The concrete almost always wins.",
+        minutes: 7,
+        sections: ["Concepts vs. things", "Why concrete wins", "Show, don't tell", "Arrive at the abstraction", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Abstractions have no body",
+        body: [
+          "Words like beauty, loss, freedom, honor name concepts — they have no physical form, so every reader supplies a different private idea of what they mean. Concrete words name things a reader can actually picture: a chipped mug, a locked gate, a porch light.",
+          "The gap matters more than it seems. When a line feels flat or forgettable, it's very often hiding an abstraction that should be swapped for a specific, physical thing.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "Chekhov's rule",
+        text: "Don't tell me the moon is shining; show me the glint of light on broken glass. Trade the concept for the thing that produces it.",
+      },
+      {
+        type: "concept",
+        heading: "Why concrete language wins",
+        body: [
+          "Readers process and remember concrete language far more easily than abstraction — it gives the mind something to hold. Studies of comprehension bear this out, but you already know it: 'I see' means 'I understand.' We think in things.",
+          "Concrete detail also means roughly the same to everyone. 'A locked gate' lands the same in every reader; 'oppression' splinters into a thousand private versions. The concrete unifies the reader's experience.",
+        ],
+      },
+      {
+        type: "compare",
+        heading: "Abstract vs. concrete",
+        left: {
+          label: "Abstract",
+          lines: [
+            "She felt a deep sadness and a sense of hopelessness about her situation.",
+          ],
+        },
+        right: {
+          label: "Concrete",
+          lines: [
+            "She washed the same cup three times, then set it down and forgot why she was standing there.",
+          ],
+        },
+        caption: "The left names two abstractions and lands on nothing. The right never says sad or hopeless — but the repeated washing and the forgetting show a mind underwater, and the reader feels it instead of being told.",
+      },
+      {
+        type: "concept",
+        heading: "Specificity within the concrete",
+        body: [
+          "Concreteness has degrees. 'A bird' is more abstract than 'a crow,' and 'a crow' is weaker than 'a crow shaking water off one wing.' The more specific the noun and the more active the verb, the more the image lives.",
+          "So don't stop at concrete — push toward specific. Specific nouns and vivid verbs are the fastest way to make an image sharp and memorable.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "Arrive at the abstraction, don't lead with it",
+        body: [
+          "This doesn't ban abstract words forever. A passage built on concrete images can earn one direct abstract statement — because by then the reader has felt the feeling, so naming it lands like a confession rather than a claim.",
+          "The mistake is opening there. Lead with 'she was devastated' and you've spent the feeling before earning it. Lead with the image, and the abstraction — if you still need it — arrives with weight.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "Abstractions name concepts; concrete words name things you can sense.",
+          "Readers understand and remember the concrete far better.",
+          "Push past concrete to specific: a crow, not a bird.",
+          "Arrive at an abstraction through images — don't open on it.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Find an abstract word in your writing — sad, angry, beautiful, afraid — and replace it with one concrete, specific detail that produces the feeling without naming it. Cut the abstract word entirely.",
+      },
+    ],
+  },
+  "im-2": {
+    title: "The five senses",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "Most first-draft writing is all eyes. Sound, smell, touch, and taste are what actually make a scene feel physically real.",
+        minutes: 6,
+        sections: ["Beyond the visual", "Smell and memory", "Don't checklist", "The sense audit", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "First drafts are almost all sight",
+        body: [
+          "Most early writing leans entirely on the visual — what a place looks like, what a face does. Sound, smell, touch, and taste go missing, which is a lost opportunity, because non-visual senses are often what actually triggers memory and emotion.",
+          "Sight tells the reader about a scene. The other senses put the reader inside it. A single well-placed non-visual detail can make a whole scene suddenly, physically real.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The core idea",
+        text: "Sight describes a world. Smell, sound, and touch make the reader's body believe they're in it.",
+      },
+      {
+        type: "concept",
+        heading: "Smell is wired to memory",
+        body: [
+          "Smell in particular is tied unusually closely to memory and emotion — more directly than any other sense. A single smell detail — bread, gasoline, a specific perfume — can do more emotional work in five words than a paragraph of visual description.",
+          "It's a shortcut straight to feeling. When you want a scene to land in the body, reach for what it smells like before what it looks like.",
+        ],
+      },
+      {
+        type: "example",
+        heading: "A non-visual detail grounding a scene",
+        variant: 'prose',
+        lines: [
+          "The hospital didn't look frightening. It was the smell — bleach laid over something sweeter underneath, the sweetness losing — that told her where she really was.",
+        ],
+        caption: "The scene could be described visually for a paragraph. Instead one smell — bleach over something sweeter, 'the sweetness losing' — does all the work, and puts the reader bodily in the room.",
+      },
+      {
+        type: "concept",
+        heading: "One sense, not all five",
+        body: [
+          "You don't need to cram every sense into a passage — that becomes an exhausting checklist. Even one unexpected non-visual detail, placed deliberately, transforms a scene. Five senses per paragraph is a chore to read.",
+          "Reach for the one sense that most belongs to this moment — the sound of a specific silence, the texture of a specific object — and trust it. Precision beats coverage.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "The sense audit",
+        body: [
+          "A practical revision pass: go through a scene and highlight every sensory detail. If everything you highlighted is visual, that's the flag — not because sight is wrong, but because the scene is missing the dimensions a real body would register.",
+          "Then add one detail from a different sense, in the spot where it matters most. Often that single addition is what makes a flat scene suddenly present.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "First drafts over-rely on sight; the other senses create presence.",
+          "Smell is wired to memory — it reaches feeling fast.",
+          "Use one deliberate non-visual detail, not a five-sense checklist.",
+          "Audit a scene: if it's all visual, add one other sense.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Take a scene you've written and mark every sensory detail. If they're all visual, add exactly one detail from another sense — sound, smell, touch, or taste — where it matters most.",
+      },
+    ],
+  },
+  "im-3": {
+    title: "Extended metaphor",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "Most metaphors flash once and vanish. An extended metaphor runs through a whole piece, deepening each time it returns — giving the work a spine.",
+        minutes: 7,
+        sections: ["One image, sustained", "Deepen, don't repeat", "The strain risk", "Discovered vs. forced", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "A metaphor that stays",
+        body: [
+          "Most metaphors appear once and disappear. An extended metaphor instead runs through an entire piece — a poem, a paragraph, a whole story — with each return deepening the image rather than just repeating it. Done well, it gives a work a spine everything else orbits.",
+          "The single sustained image becomes a lens the whole piece looks through. It's one of the most powerful structural tools available, and one of the easiest to overreach with.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The core idea",
+        text: "A single metaphor, returned to and deepened, can hold an entire piece together — an idea everything else quietly orbits.",
+      },
+      {
+        type: "concept",
+        heading: "Each return should reveal something new",
+        body: [
+          "The technique works because every return can turn the image slightly. If a poem opens comparing grief to weather, a later return might shift it — the storm passes, or changes direction — tracking the emotional movement through the metaphor's own logic.",
+          "So don't just restate the image; evolve it. The second and third appearances should show a new facet, so the metaphor accumulates meaning instead of merely echoing.",
+        ],
+      },
+      {
+        type: "example",
+        heading: "An extended metaphor evolving",
+        variant: 'prose',
+        lines: [
+          "At first the debt was a small dog, easy to walk past.",
+          "By spring it had grown teeth, and a bark, and a way of waiting by the door.",
+          "By the end it was the only thing in the house that ate.",
+        ],
+        caption: "One image — the debt as an animal — returns three times, growing each time from harmless to menacing to all-consuming. The metaphor doesn't repeat; it develops, and carries the whole arc of the situation.",
+      },
+      {
+        type: "concept",
+        heading: "The strain risk",
+        body: [
+          "The main danger is strain: forcing the metaphor into places it doesn't naturally fit, just to keep the thread going. When that happens it stops feeling organic and starts feeling like a puzzle the writer is solving instead of a feeling being expressed.",
+          "If a return to the image feels like a stretch to you, it will feel like a stretch to the reader. Better to let the metaphor rest than to jam it in where it doesn't belong.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "Discovered, not engineered",
+        body: [
+          "The strongest extended metaphors feel discovered each time — as if the writer couldn't help noticing the connection again — not dutifully reused to prove the piece has a 'through-line.' The test is whether each return feels inevitable or manufactured.",
+          "Aim for the sense that the image keeps recurring because it's true, not because you decided to structure the piece around it. When it's working, the metaphor seems to belong to the subject itself.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "An extended metaphor runs through a whole piece and gives it a spine.",
+          "Each return should deepen or evolve the image, not just repeat it.",
+          "Beware strain — don't force the image where it doesn't fit.",
+          "The best returns feel discovered, not engineered.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Take a metaphor from your opening and find one later place it could naturally return — changed, deepened, showing a new facet. Then check: does the return feel inevitable, or forced?",
+      },
+    ],
+  },
+  "im-4": {
+    title: "Avoiding cliché",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "A cliché was once a fresh image. Overuse wore the meaning off it. The fix isn't to avoid feeling — it's to find your own version of it.",
+        minutes: 6,
+        sections: ["Worn-smooth language", "The real fix", "Why they sneak in", "The anyone test", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Clichés were once alive",
+        body: [
+          "'Heart of gold,' 'time heals all wounds,' 'butterflies in my stomach' — these were once genuinely fresh, surprising images. Generations of overuse wore the surprise, and most of the meaning, off them. A reader's eye now slides right over a cliché without feeling it.",
+          "That's the real cost: a cliché doesn't communicate, it just occupies space the reader skims. The feeling you meant to convey passes by unregistered.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The core idea",
+        text: "A cliché is a dead image. The reader has seen it too many times to feel it — so it takes up the space of feeling without delivering any.",
+      },
+      {
+        type: "concept",
+        heading: "The fix is specificity, not avoidance",
+        body: [
+          "The solution isn't to avoid the underlying feeling — nervousness, grief, love are all worth writing. It's to find your own specific version instead of the pre-packaged phrase everyone has memorized. What does this nervousness actually feel like, for this exact person, right now?",
+          "The cliché is generic by definition. Your specific, observed version — what the feeling did in your body, in this moment — will never sound like anyone else's writing, because it's yours.",
+        ],
+      },
+      {
+        type: "compare",
+        heading: "Cliché vs. observed",
+        left: {
+          label: "Cliché",
+          lines: [
+            "Her heart was pounding out of her chest and butterflies filled her stomach.",
+          ],
+        },
+        right: {
+          label: "Specific",
+          lines: [
+            "She noticed she was gripping her keys so hard the teeth left a red print across her palm.",
+          ],
+        },
+        caption: "The left reaches for two worn phrases and lands on nothing felt. The right observes one exact physical thing — the keys biting the palm — and the nervousness becomes real because it's specific to this hand, this moment.",
+      },
+      {
+        type: "concept",
+        heading: "Why they sneak in — and how to catch them",
+        body: [
+          "Clichés slip into first drafts because they're fast: the phrase is already sitting there, fully formed, and reaching for it is easier than inventing something true. That's fine for a first draft. Revision is where you interrogate every phrase that arrived too easily.",
+          "The tell is speed. If a phrase came without effort, be suspicious — the easy phrase is usually the borrowed one.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "The 'anyone' test",
+        body: [
+          "A quick diagnostic: could this phrase have been written by literally anyone, about any character, in any story? If yes, it's probably a cliché even if it doesn't ring an obvious bell. The specific, the odd, the personally observed never sound generic.",
+          "Run your images through that question. Anything that could belong to any story belongs to none — replace it with something only this character, in this moment, would produce.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "Clichés were once fresh; overuse wore the feeling off them.",
+          "The fix is your own specific version, not avoiding the feeling.",
+          "They sneak in because they're fast — hunt them in revision.",
+          "The test: could anyone have written it? Then it's a cliché.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Find a cliché in your writing. Ask what specifically caused that feeling in this exact scene, for this exact person — then write that instead of the borrowed phrase.",
+      },
+    ],
+  },
+  "im-5": {
+    title: "Imagery in dialogue",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "Characters don't speak in polished imagery — but the comparisons they reach for reveal who they are and what world they come from.",
+        minutes: 6,
+        sections: ["Speech isn't polished", "Comparisons reveal character", "Source from their world", "Attention as character", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Characters aren't poets",
+        body: [
+          "Real speech is rougher than narration — clipped, imperfect, unpolished. Characters don't talk in the careful imagery a narrator might use. But the comparisons they do reach for, even offhand, still say something true about who they are and what they notice.",
+          "So imagery in dialogue works differently than imagery in narration. It's not about beauty — it's about revelation. Every comparison a character makes is a small window into their mind.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The core idea",
+        text: "A character's metaphors come from their world, not yours. What they compare things to is a fingerprint.",
+      },
+      {
+        type: "concept",
+        heading: "The comparison is a fingerprint",
+        body: [
+          "A character who describes fear as 'like a phone about to ring' reveals something different from one who says 'like drowning.' The first suggests dread of an incoming event; the second, being overwhelmed and submerged. Neither is more correct — they reveal different people.",
+          "So use the comparisons your characters make as characterization. What someone reaches for to explain a feeling tells you where their mind lives.",
+        ],
+      },
+      {
+        type: "compare",
+        heading: "Generic vs. character-sourced",
+        left: {
+          label: "Generic",
+          lines: [
+            "\"I was so nervous,\" he said. \"My heart was racing.\"",
+          ],
+        },
+        right: {
+          label: "From his world (a mechanic)",
+          lines: [
+            "\"I was running rough,\" he said. \"Like an engine about to throw a rod.\"",
+          ],
+        },
+        caption: "The left could be anyone. The right — 'running rough,' 'throw a rod' — could only be a man who works on engines. The comparison does double duty: it conveys the nerves and reveals the whole life behind them.",
+      },
+      {
+        type: "concept",
+        heading: "Source imagery from the character's world",
+        body: [
+          "The trick is drawing a character's comparisons from their own life — their job, their obsessions, their background — not from yours. A nurse reaches for something clinical; a gardener for something that grows. Giving every character the same elegant, writerly imagery flattens them into versions of the author.",
+          "Before you write a character's comparison, ask: what would this specific person actually reach for? The answer individualizes them instantly.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "What they notice is who they are",
+        body: [
+          "This extends beyond spoken comparisons to attention itself. What a character registers in a scene — what they'd actually notice walking into a room — reveals as much as what they say, sometimes more. A jeweler and a carpenter notice different things about the same door.",
+          "Let each character's attention be specific to them. The details they fix on characterize them silently, without a word of explanation.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "Characters speak rougher than narration — imagery reveals, not decorates.",
+          "The comparison a character makes is a fingerprint of who they are.",
+          "Source their imagery from their world — job, background, obsessions.",
+          "What a character notices characterizes them as much as what they say.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Give a character a comparison drawn specifically from their job, hobby, or background — not a generic writerly one. Let the image reveal the person, not just the feeling.",
+      },
+    ],
+  },
+  "im-6": {
+    title: "When to let go of a metaphor",
+    blocks: [
+      {
+        type: "intro",
+        takeaway: "Not every idea needs a metaphor. Sometimes the plainest possible sentence is the strongest — and knowing when is its own craft.",
+        minutes: 6,
+        sections: ["Plain can be strongest", "When to go bare", "The stacking tell", "Restraint as skill", "See it work", "Recap", "Your turn"],
+      },
+      {
+        type: "concept",
+        heading: "Sometimes plain is the power move",
+        body: [
+          "Not every idea needs a metaphor. Sometimes the plainest, most literal sentence available is the strongest choice, and reaching for imagery just softens a moment that needed to land hard and direct, with nothing between the reader and the fact.",
+          "Imagery is a tool, not an obligation. A writer who reaches for a comparison at every turn dilutes the moments that actually need one. Knowing when to stay bare is as important as knowing how to build an image.",
+        ],
+      },
+      {
+        type: "callout",
+        label: "The core idea",
+        text: "A death, a confession, a plain hard fact often lands harder with no metaphor at all. Imagery can cushion exactly the blow you wanted to land.",
+      },
+      {
+        type: "concept",
+        heading: "When to go bare",
+        body: [
+          "A death, a confession, a single stark piece of information often works better stated flatly than dressed in comparison. Imagery gently redirects the reader's attention onto the comparison itself — which is the wrong move when you want their attention to stay entirely on the bare fact.",
+          "The bigger and heavier the moment, the more you should consider plainness. The reader doesn't need help feeling a death; they need you to get out of the way.",
+        ],
+      },
+      {
+        type: "compare",
+        heading: "Adorned vs. bare",
+        left: {
+          label: "Reaching for imagery",
+          lines: [
+            "The news settled over him like a heavy grey blanket, smothering, cold as a winter lake, pulling him down into some dark water.",
+          ],
+        },
+        right: {
+          label: "Bare",
+          lines: [
+            "The doctor said six weeks. He nodded, as if six weeks were a normal thing to say.",
+          ],
+        },
+        caption: "The stacked metaphors on the left actually distance us from the grief — we're watching the comparisons, not the man. The bare right-hand version, with one small human gesture, hits far harder precisely because nothing stands between us and it.",
+      },
+      {
+        type: "concept",
+        heading: "The stacking tell",
+        body: [
+          "A reliable sign a metaphor isn't working: you find yourself stacking two or three comparisons for the same feeling, hoping one will land. That instinct to keep trying different images usually means none of them is right — and the moment may just want plain language.",
+          "One clean metaphor or none. If you're piling them up, stop and ask whether the literal version would hit harder. It often will.",
+        ],
+      },
+      {
+        type: "concept",
+        heading: "Restraint is the harder skill",
+        body: [
+          "Recognizing when a moment doesn't need a metaphor is itself a craft skill — often harder to develop than generating metaphors, since most writing instruction pushes toward more imagery, not less. Letting go of a comparison isn't a failure of imagination; it's a sign of control.",
+          "The mature writer trusts plainness where plainness is stronger. That confidence — to leave a hard moment bare — is what separates controlled writing from decorated writing.",
+        ],
+      },
+      {
+        type: "recap",
+        heading: "What to carry with you",
+        points: [
+          "Not every idea needs a metaphor; plain is sometimes strongest.",
+          "Go bare for the heaviest moments — death, confession, hard facts.",
+          "Stacking two or three metaphors means none is working.",
+          "Restraint is a harder, more mature skill than generating imagery.",
+        ],
+      },
+      {
+        type: "tryit",
+        heading: "Your turn",
+        prompt: "Find a place where you reached for a metaphor out of habit, especially a heavy moment. Write the plain, literal version instead — and decide honestly which one hits harder.",
+      },
+    ],
+  },
 }
 
 // Returns a lesson's rich blocks if authored, else null (caller falls back to
