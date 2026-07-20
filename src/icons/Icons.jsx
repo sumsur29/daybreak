@@ -10,11 +10,13 @@ const base = (strokeWidth) => ({
 })
 
 export function IconFeather({ size = 22, strokeWidth = 1.7 }) {
+  // Pen-nib mark, used for "Poem" throughout — kept the export name so every
+  // call site (Today, Practice, Learn, You, session screens) picks it up automatically.
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" {...base(strokeWidth)}>
-      <path d="M20.5 3.5C11 4 5.5 9.5 4.5 17l-1 3.5" />
-      <path d="M6 15c4-.3 7.5-2.2 9.8-5.4" />
-      <path d="M13 4.7 19.3 11" />
+      <path d="M12 2.5 19 12l-7 9.5L5 12z" />
+      <path d="M12 6.5V17" />
+      <circle cx="12" cy="10.5" r="1" fill="currentColor" stroke="none" />
     </svg>
   )
 }
@@ -88,9 +90,8 @@ export function IconClock({ size = 14, strokeWidth = 1.9 }) {
 export function IconSparkleWand({ size = 13, strokeWidth = 2.1 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" {...base(strokeWidth)}>
-      <path d="M20.5 3.5C11 4 5.5 9.5 4.5 17l-1 3.5" />
-      <path d="M6 15c4-.3 7.5-2.2 9.8-5.4" />
-      <path d="M13 4.7 19.3 11" />
+      <path d="M12 3.5c.6 3 2.3 4.7 5.3 5.3-3 .6-4.7 2.3-5.3 5.3-.6-3-2.3-4.7-5.3-5.3 3-.6 4.7-2.3 5.3-5.3Z" strokeLinejoin="round" />
+      <path d="M19 14.5c.3 1.4 1 2.1 2.4 2.4-1.4.3-2.1 1-2.4 2.4-.3-1.4-1-2.1-2.4-2.4 1.4-.3 2.1-1 2.4-2.4Z" strokeLinejoin="round" />
     </svg>
   )
 }
