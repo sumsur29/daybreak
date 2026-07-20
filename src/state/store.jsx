@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react'
 import { buildInitialState, titleForLevel } from '../data/seed'
 
-const STORAGE_KEY = 'daybreak_state_v1'
+const STORAGE_KEY = 'daybreak_state_v2'
 const StoreContext = createContext(null)
 
 function loadState() {
