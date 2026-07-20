@@ -146,7 +146,7 @@ export function StoreProvider({ children }) {
     })
   }, [])
 
-  const startCourseLesson = useCallback((courseId, lessonId) => {
+  const startCourseLesson = useCallback((courseId, lessonId, recap) => {
     setState((s) => {
       let alreadyDone = false
       const courses = s.courses.map((c) => {
@@ -183,7 +183,23 @@ export function StoreProvider({ children }) {
       // whether it's a fresh lesson or a replay. Idempotent per calendar day.
       const marked = markTodayActive(s)
 
-      return { ...s, courses, profile, stats, streak: marked.streak, lastActiveDate: marked.lastActiveDate }
+      // Save the lesson's recap so it can be revisited from the profile.
+      // Keyed by lessonId so re-completing updates rather than duplicates.
+      let savedRecaps = s.savedRecaps || []
+      if (recap && recap.points && recap.points.length) {
+        const entry = {
+          lessonId,
+          courseId,
+          courseTitle: recap.courseTitle || '',
+          lessonTitle: recap.lessonTitle || '',
+          heading: recap.heading || 'Recap',
+          points: recap.points,
+          savedAt: new Date().toISOString(),
+        }
+        savedRecaps = [entry, ...savedRecaps.filter((r) => r.lessonId !== lessonId)]
+      }
+
+      return { ...s, courses, profile, stats, streak: marked.streak, lastActiveDate: marked.lastActiveDate, savedRecaps }
     })
   }, [])
 

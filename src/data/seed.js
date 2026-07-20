@@ -463,5 +463,7 @@ export function buildInitialState() {
     stats: blankStats,
     yesterdayPiece: null,
     drafts: {}, // keyed by draft key -> { text, updatedAt }
+    savedRecaps: [], // completed-lesson recaps, newest first, for revision
+    lastActiveDate: null, // YYYY-MM-DD of last streak-advancing activity
   }
 }

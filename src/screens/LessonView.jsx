@@ -24,12 +24,22 @@ export default function LessonView() {
     )
   }
 
+  const rich = getLessonBlocks(lesson.id)
+
   const handleComplete = () => {
-    startCourseLesson(course.id, lesson.id)
+    // capture the lesson's recap so it can be revisited from the profile
+    const recapBlock = rich?.blocks?.find((b) => b.type === 'recap')
+    const recap = recapBlock
+      ? {
+          courseTitle: course.title,
+          lessonTitle: rich.title || lesson.title,
+          heading: recapBlock.heading,
+          points: recapBlock.points,
+        }
+      : null
+    startCourseLesson(course.id, lesson.id, recap)
     navigate(`/learn/${course.id}`)
   }
-
-  const rich = getLessonBlocks(lesson.id)
 
   // Rich, tap-through lesson player
   if (rich) {
