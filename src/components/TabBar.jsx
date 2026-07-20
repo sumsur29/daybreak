@@ -44,10 +44,10 @@ export default function TabBar() {
         style={{
           position: 'relative',
           width: 'min(88vw, 336px)',
-          background: 'rgba(255,255,255,0.55)',
+          background: 'rgba(255,255,255,0.86)',
           backdropFilter: 'blur(22px) saturate(180%)',
           WebkitBackdropFilter: 'blur(22px) saturate(180%)',
-          border: '1px solid rgba(255,255,255,0.7)',
+          border: '1px solid rgba(255,255,255,0.9)',
           borderRadius: 26,
           padding: 6,
           boxShadow: '0 14px 34px -10px rgba(120,60,20,0.32), 0 2px 10px -2px rgba(120,60,20,0.14)',

@@ -42,6 +42,8 @@ export default function Today() {
             <div style={{ fontSize: 14, opacity: 0.92, marginTop: 6 }}>Ready for today's writing?</div>
           </div>
           <div
+            className="press"
+            onClick={() => navigate('/progress')}
             style={{
               width: 64,
               height: 64,
@@ -53,6 +55,7 @@ export default function Today() {
               alignItems: 'center',
               justifyContent: 'center',
               flex: 'none',
+              cursor: 'pointer',
             }}
           >
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, lineHeight: 1 }}>
@@ -61,7 +64,11 @@ export default function Today() {
             <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.05em' }}>DAYS</div>
           </div>
         </div>
-        <div style={{ marginTop: 16 }}>
+        <div
+          className="press"
+          onClick={() => navigate('/progress')}
+          style={{ marginTop: 16, cursor: 'pointer' }}
+        >
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, fontWeight: 700, marginBottom: 5 }}>
             <span>Level {profile.level} · {profile.title}</span>
             <span>{profile.xp} / {profile.xpToNext} XP</span>

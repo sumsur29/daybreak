@@ -12,7 +12,7 @@ export default function CourseDetail() {
 
   if (!course) {
     return (
-      <Screen>
+      <Screen withTabBar>
         <div style={{ padding: 24 }}>
           <BackTile to="/learn" />
           <p style={{ marginTop: 16 }}>Course not found.</p>
@@ -22,7 +22,7 @@ export default function CourseDetail() {
   }
 
   return (
-    <Screen>
+    <Screen withTabBar>
       <div style={{ padding: '14px 20px 0', display: 'flex', alignItems: 'center', gap: 13 }}>
         <BackTile to="/learn" />
         <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'oklch(0.3 0.03 55)' }}>
@@ -39,7 +39,7 @@ export default function CourseDetail() {
         </div>
       </div>
 
-      <div style={{ padding: '18px 20px 96px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ padding: '18px 20px 0', display: 'flex', flexDirection: 'column', gap: 10 }}>
         {course.lessons.map((lesson, i) => (
           <button
             key={lesson.id}

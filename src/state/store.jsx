@@ -127,13 +127,38 @@ export function StoreProvider({ children }) {
 
   const startCourseLesson = useCallback((courseId, lessonId) => {
     setState((s) => {
+      let alreadyDone = false
       const courses = s.courses.map((c) => {
         if (c.id !== courseId) return c
-        const lessons = c.lessons.map((l) => (l.id === lessonId ? { ...l, done: true } : l))
+        const lessons = c.lessons.map((l) => {
+          if (l.id === lessonId) {
+            if (l.done) alreadyDone = true
+            return { ...l, done: true }
+          }
+          return l
+        })
         const done = lessons.filter((l) => l.done).length
         return { ...c, lessons, done }
       })
-      return { ...s, courses }
+
+      // First completion of a lesson awards XP (and can level up).
+      let profile = s.profile
+      let stats = s.stats
+      if (!alreadyDone) {
+        const LESSON_XP = 20
+        let xp = profile.xp + LESSON_XP
+        let level = profile.level
+        let xpToNext = profile.xpToNext
+        if (xp >= xpToNext) {
+          xp -= xpToNext
+          level += 1
+          xpToNext = Math.round(xpToNext * 1.15)
+        }
+        profile = { ...profile, xp, level, xpToNext, title: titleForLevel(level) }
+        stats = { ...stats, lessons: stats.lessons + 1 }
+      }
+
+      return { ...s, courses, profile, stats }
     })
   }, [])
 

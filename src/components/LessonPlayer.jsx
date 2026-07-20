@@ -543,7 +543,7 @@ function TryItBlock({ block, attempt, setAttempt, result }) {
               <IconCheck size={18} strokeWidth={2.4} />
             </span>
             <span style={{ fontSize: 13.5, fontWeight: 700, color: 'oklch(0.42 0.05 45)' }}>
-              Saved to your portfolio · {result.words} words · {result.lines} line{result.lines === 1 ? '' : 's'}
+              Saved · {result.words} words · {result.lines} line{result.lines === 1 ? '' : 's'} · +20 XP
             </span>
           </div>
 
