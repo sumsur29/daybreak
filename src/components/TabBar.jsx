@@ -16,8 +16,7 @@ export default function TabBar() {
         flex: 'none',
         background: '#fff',
         borderTop: '1px solid var(--card-border)',
-        padding:
-          'calc(env(safe-area-inset-bottom, 0px) * 0.5 + 10px) 18px calc(env(safe-area-inset-bottom, 0px) * 0.5 + 10px)',
+        padding: '10px 18px calc(env(safe-area-inset-bottom, 0px) * 0.25 + 8px)',
         display: 'flex',
         justifyContent: 'space-between',
       }}
