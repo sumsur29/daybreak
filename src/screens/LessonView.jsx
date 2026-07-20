@@ -38,6 +38,7 @@ export default function LessonView() {
         courseTitle={course.title}
         title={rich.title || lesson.title}
         blocks={rich.blocks}
+        alreadyComplete={!!lesson.done}
         onComplete={handleComplete}
         onExit={() => navigate(`/learn/${course.id}`)}
       />

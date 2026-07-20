@@ -76,6 +76,9 @@ export default function Today() {
           <div style={{ height: 8, background: 'rgba(255,255,255,0.3)', borderRadius: 99, overflow: 'hidden' }}>
             <div style={{ width: `${xpPct}%`, height: '100%', background: '#fff', borderRadius: 99 }} />
           </div>
+          <div style={{ fontSize: 11, fontWeight: 700, opacity: 0.85, marginTop: 8, textAlign: 'right' }}>
+            View progress ›
+          </div>
         </div>
       </div>
 

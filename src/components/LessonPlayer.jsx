@@ -37,7 +37,7 @@ function exerciseFeedback(text, courseTitle) {
 
 // Renders a rich lesson as a tap-through sequence of section cards.
 // Props: courseTitle, blocks[], onComplete(), onExit()
-export default function LessonPlayer({ courseTitle, title, blocks, onComplete, onExit }) {
+export default function LessonPlayer({ courseTitle, title, blocks, alreadyComplete, onComplete, onExit }) {
   const [index, setIndex] = useState(0)
   const scrollRef = useRef(null)
   const { saveDraftPiece } = useStore()
@@ -152,6 +152,7 @@ export default function LessonPlayer({ courseTitle, title, blocks, onComplete, o
             attempt={attempt}
             setAttempt={setAttempt}
             result={result}
+            alreadyComplete={alreadyComplete}
           />
         </div>
       </div>
@@ -213,7 +214,7 @@ export default function LessonPlayer({ courseTitle, title, blocks, onComplete, o
 
 /* ---------- block renderers ---------- */
 
-function BlockView({ block, courseTitle, lessonTitle, attempt, setAttempt, result }) {
+function BlockView({ block, courseTitle, lessonTitle, attempt, setAttempt, result, alreadyComplete }) {
   switch (block.type) {
     case 'intro':
       return <IntroBlock block={block} courseTitle={courseTitle} lessonTitle={lessonTitle} />
@@ -230,7 +231,7 @@ function BlockView({ block, courseTitle, lessonTitle, attempt, setAttempt, resul
     case 'recap':
       return <RecapBlock block={block} />
     case 'tryit':
-      return <TryItBlock block={block} attempt={attempt} setAttempt={setAttempt} result={result} />
+      return <TryItBlock block={block} attempt={attempt} setAttempt={setAttempt} result={result} alreadyComplete={alreadyComplete} />
     default:
       return null
   }
@@ -477,7 +478,7 @@ function RecapBlock({ block }) {
   )
 }
 
-function TryItBlock({ block, attempt, setAttempt, result }) {
+function TryItBlock({ block, attempt, setAttempt, result, alreadyComplete }) {
   return (
     <div style={{ paddingTop: 8 }}>
       <Eyebrow>
@@ -543,7 +544,7 @@ function TryItBlock({ block, attempt, setAttempt, result }) {
               <IconCheck size={18} strokeWidth={2.4} />
             </span>
             <span style={{ fontSize: 13.5, fontWeight: 700, color: 'oklch(0.42 0.05 45)' }}>
-              Saved · {result.words} words · {result.lines} line{result.lines === 1 ? '' : 's'} · +20 XP
+              Saved · {result.words} words · {result.lines} line{result.lines === 1 ? '' : 's'}{alreadyComplete ? '' : ' · +20 XP'}
             </span>
           </div>
 
