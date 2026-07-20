@@ -1,43 +1,31 @@
 import TabBar from './TabBar'
+import ProfileButton from './ProfileButton'
 
-// Tab-bar screens use a real flex layout so the bar docks directly under
-// whatever content there is — no floating over empty background when a
-// screen (like a blank-slate Today) is shorter than the viewport.
-// Screens without a tab bar keep the simpler single scroll container, since
-// their sticky bottom CTAs rely on it being the positioned containing block.
+// withTabBar screens (Today, Learn, Practice, Progress) get the floating glass
+// nav pill and the top-right profile avatar as fixed overlays — both escape
+// this container's scroll/clip since nothing here sets a transform. Extra
+// top/bottom padding on the scrollable content keeps real content clear of
+// where those floating elements sit, regardless of how tall the content is.
 export default function Screen({ children, withTabBar = false, background = 'var(--canvas)' }) {
-  if (withTabBar) {
-    return (
+  return (
+    <>
       <div
         style={{
           position: 'absolute',
           inset: 0,
           background,
-          display: 'flex',
-          flexDirection: 'column',
-          paddingTop: 'env(safe-area-inset-top, 0px)',
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          paddingTop: withTabBar
+            ? 'calc(env(safe-area-inset-top, 0px) + 52px)'
+            : 'env(safe-area-inset-top, 0px)',
         }}
       >
-        <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
-          {children}
-        </div>
-        <TabBar />
+        {children}
+        {withTabBar && <div style={{ height: 110 }} />}
       </div>
-    )
-  }
-
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        inset: 0,
-        background,
-        overflowY: 'auto',
-        WebkitOverflowScrolling: 'touch',
-        paddingTop: 'env(safe-area-inset-top, 0px)',
-      }}
-    >
-      {children}
-    </div>
+      {withTabBar && <TabBar />}
+      {withTabBar && <ProfileButton />}
+    </>
   )
 }

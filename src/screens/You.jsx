@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
 import { useStore } from '../state/store'
-import { IconGear, IconFeather, IconBook, IconCheck } from '../icons/Icons'
+import { IconGear, IconFeather, IconBook, IconCheck, IconBack } from '../icons/Icons'
 
 const filters = ['All', 'Poems', 'Stories']
 
@@ -19,10 +19,28 @@ export default function You() {
   })
 
   return (
-    <Screen withTabBar>
+    <Screen>
       {/* profile header */}
       <div style={{ background: 'var(--accent-gradient)', color: '#fff', padding: '20px 24px 26px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <button
+            aria-label="Back"
+            className="press"
+            onClick={() => navigate('/')}
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              flex: 'none',
+            }}
+          >
+            <IconBack size={18} strokeWidth={1.9} />
+          </button>
           <div
             style={{
               width: 58,

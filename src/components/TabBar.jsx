@@ -1,42 +1,106 @@
-import { NavLink } from 'react-router-dom'
-import { IconSun, IconBook, IconPencilPage, IconBarChart, IconPerson } from '../icons/Icons'
+import { NavLink, useLocation } from 'react-router-dom'
+import { IconSun, IconBook, IconPencilPage, IconBarChart } from '../icons/Icons'
 
+// "You" lives behind the floating avatar (top-right) instead of this bar —
+// see ProfileButton.jsx. These are the 4 primary destinations.
 const tabs = [
   { to: '/', label: 'Today', Icon: IconSun, end: true },
   { to: '/learn', label: 'Learn', Icon: IconBook },
   { to: '/practice', label: 'Practice', Icon: IconPencilPage },
   { to: '/progress', label: 'Progress', Icon: IconBarChart },
-  { to: '/you', label: 'You', Icon: IconPerson },
 ]
 
+function activeIndexFor(pathname) {
+  let best = 0
+  let bestLen = -1
+  tabs.forEach((tab, i) => {
+    const matches = tab.end ? pathname === tab.to : pathname.startsWith(tab.to)
+    if (matches && tab.to.length > bestLen) {
+      best = i
+      bestLen = tab.to.length
+    }
+  })
+  return best
+}
+
 export default function TabBar() {
+  const { pathname } = useLocation()
+  const activeIndex = activeIndexFor(pathname)
+
   return (
-    <nav
+    <div
       style={{
-        flex: 'none',
-        background: '#fff',
-        borderTop: '1px solid var(--card-border)',
-        padding: '10px 18px calc(env(safe-area-inset-bottom, 0px) * 0.25 + 8px)',
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        zIndex: 30,
+        pointerEvents: 'none',
       }}
     >
-      {tabs.map(({ to, label, Icon, end }) => (
-        <NavLink
-          key={to}
-          to={to}
-          end={end}
-          className="press"
-          style={({ isActive }) => ({
-            textAlign: 'center',
-            color: isActive ? 'var(--accent)' : 'var(--tab-inactive)',
-            flex: 1,
-          })}
+      <nav
+        style={{
+          position: 'relative',
+          width: 'min(88vw, 336px)',
+          background: 'rgba(255,255,255,0.55)',
+          backdropFilter: 'blur(22px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(180%)',
+          border: '1px solid rgba(255,255,255,0.7)',
+          borderRadius: 26,
+          padding: 6,
+          boxShadow: '0 14px 34px -10px rgba(120,60,20,0.32), 0 2px 10px -2px rgba(120,60,20,0.14)',
+          pointerEvents: 'auto',
+        }}
+      >
+        {/* sliding glass highlight, morphs behind the active item */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 6,
+            bottom: 6,
+            left: 6,
+            right: 6,
+            pointerEvents: 'none',
+          }}
         >
-          <Icon size={23} strokeWidth={1.8} />
-          <div style={{ fontSize: 10, fontWeight: 700, marginTop: 3 }}>{label}</div>
-        </NavLink>
-      ))}
-    </nav>
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              width: '25%',
+              left: `${activeIndex * 25}%`,
+              background: 'rgba(255,255,255,0.92)',
+              borderRadius: 19,
+              boxShadow: '0 6px 14px -4px rgba(120,60,20,0.28), inset 0 0 0 1px rgba(255,255,255,0.8)',
+              transition: 'left 380ms cubic-bezier(0.34, 1.35, 0.64, 1)',
+            }}
+          />
+        </div>
+
+        <div style={{ position: 'relative', display: 'flex', zIndex: 1 }}>
+          {tabs.map(({ to, label, Icon, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              className="press"
+              style={({ isActive }) => ({
+                flex: 1,
+                textAlign: 'center',
+                padding: '9px 2px',
+                color: isActive ? 'var(--accent)' : 'var(--tab-inactive)',
+                transition: 'color 200ms ease',
+              })}
+            >
+              <Icon size={21} strokeWidth={1.8} />
+              <div style={{ fontSize: 9.5, fontWeight: 700, marginTop: 3 }}>{label}</div>
+            </NavLink>
+          ))}
+        </div>
+      </nav>
+    </div>
   )
 }
