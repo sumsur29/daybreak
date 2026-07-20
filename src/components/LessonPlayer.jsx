@@ -1,20 +1,73 @@
 import { useState, useRef, useEffect } from 'react'
 import { IconBook, IconArrowRight, IconCheck, IconFeather } from '../icons/Icons'
+import { useStore } from '../state/store'
+
+// Generates a few genuinely text-aware observations locally (no AI backend in
+// v1) so the exercise gives a real response before the lesson closes.
+function exerciseFeedback(text, courseTitle) {
+  const words = text.trim().split(/\s+/).filter(Boolean).length
+  const lines = text.split('\n').filter((l) => l.trim().length > 0).length
+  const poetry = /poetry/i.test(courseTitle)
+  const notes = []
+  if (poetry) {
+    notes.push(
+      lines <= 3
+        ? 'Compact — with this few lines, every break is doing real work. Read it aloud and feel where each one lands.'
+        : 'You gave it room to breathe across several lines. Check whether each break falls where you actually want the reader to pause.'
+    )
+    notes.push(
+      /[.!?]\s*$/.test(text.trim())
+        ? 'You closed on a full stop. Try ending mid-thought sometime and notice how it changes the poem\'s certainty.'
+        : 'Ending without a full stop leaves the last line hanging — often a strength, letting the silence finish the thought.'
+    )
+  } else {
+    notes.push(
+      /["“”]/.test(text)
+        ? 'Good — you brought in dialogue. Voice is doing some of the storytelling work here.'
+        : 'No dialogue yet. Even one line of speech can reveal character faster than description.'
+    )
+    notes.push(
+      words < 60
+        ? 'Short and controlled — that\'s a strength for pacing, not a flaw.'
+        : 'Solid length. Look at your first sentence — is that really where the piece starts?'
+    )
+  }
+  return { words, lines, notes }
+}
 
 // Renders a rich lesson as a tap-through sequence of section cards.
 // Props: courseTitle, blocks[], onComplete(), onExit()
 export default function LessonPlayer({ courseTitle, title, blocks, onComplete, onExit }) {
   const [index, setIndex] = useState(0)
   const scrollRef = useRef(null)
+  const { saveDraftPiece } = useStore()
   const total = blocks.length
   const block = blocks[index]
   const isLast = index === total - 1
   const isFirst = index === 0
 
+  // interactive "your turn" state (only on the tryit card)
+  const [attempt, setAttempt] = useState('')
+  const [result, setResult] = useState(null) // { words, lines, notes } once submitted
+
   // scroll each new section back to top
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0, behavior: 'auto' })
   }, [index])
+
+  const genreForCourse = /poetry|poem/i.test(courseTitle) ? 'poem' : 'story'
+
+  const submitAttempt = () => {
+    if (!attempt.trim()) return
+    const fb = exerciseFeedback(attempt, courseTitle)
+    // save the attempt to the portfolio as a draft so it isn't lost
+    const firstLine = attempt.split('\n').find((l) => l.trim().length > 0)
+    const derived = firstLine ? firstLine.trim().slice(0, 60) : `${title} — exercise`
+    saveDraftPiece({ title: derived, genre: genreForCourse, body: attempt })
+    setResult(fb)
+    // let the feedback render, then scroll it into view
+    setTimeout(() => scrollRef.current?.scrollTo({ top: 9999, behavior: 'smooth' }), 60)
+  }
 
   const next = () => {
     if (isLast) {
@@ -30,6 +83,11 @@ export default function LessonPlayer({ courseTitle, title, blocks, onComplete, o
       setIndex((i) => Math.max(0, i - 1))
     }
   }
+
+  // footer button behavior depends on whether we're on the interactive tryit card
+  const onTryIt = isLast && block.type === 'tryit'
+  const footerAction = onTryIt && !result ? submitAttempt : next
+  const footerDisabled = onTryIt && !result && !attempt.trim()
 
   return (
     <div
@@ -87,7 +145,14 @@ export default function LessonPlayer({ courseTitle, title, blocks, onComplete, o
       {/* section body */}
       <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
         <div style={{ padding: '8px 24px 24px' }} key={index}>
-          <BlockView block={block} courseTitle={courseTitle} lessonTitle={title} />
+          <BlockView
+            block={block}
+            courseTitle={courseTitle}
+            lessonTitle={title}
+            attempt={attempt}
+            setAttempt={setAttempt}
+            result={result}
+          />
         </div>
       </div>
 
@@ -102,11 +167,12 @@ export default function LessonPlayer({ courseTitle, title, blocks, onComplete, o
       >
         <button
           className="press"
-          onClick={next}
+          onClick={footerAction}
+          disabled={footerDisabled}
           style={{
             width: '100%',
-            background: 'var(--accent)',
-            color: '#fff',
+            background: footerDisabled ? 'oklch(0.9 0.02 65)' : 'var(--accent)',
+            color: footerDisabled ? 'oklch(0.6 0.02 55)' : '#fff',
             textAlign: 'center',
             padding: 16,
             borderRadius: 16,
@@ -116,13 +182,20 @@ export default function LessonPlayer({ courseTitle, title, blocks, onComplete, o
             alignItems: 'center',
             justifyContent: 'center',
             gap: 8,
-            boxShadow: 'var(--shadow-button)',
+            boxShadow: footerDisabled ? 'none' : 'var(--shadow-button)',
+            transition: 'background 200ms ease',
           }}
         >
-          {isLast ? (
-            <>
-              Complete lesson <IconCheck size={17} strokeWidth={2.4} />
-            </>
+          {onTryIt ? (
+            result ? (
+              <>
+                Complete lesson <IconCheck size={17} strokeWidth={2.4} />
+              </>
+            ) : (
+              <>
+                Get feedback <IconArrowRight size={18} />
+              </>
+            )
           ) : block.type === 'intro' ? (
             <>
               Start lesson <IconArrowRight size={18} />
@@ -140,7 +213,7 @@ export default function LessonPlayer({ courseTitle, title, blocks, onComplete, o
 
 /* ---------- block renderers ---------- */
 
-function BlockView({ block, courseTitle, lessonTitle }) {
+function BlockView({ block, courseTitle, lessonTitle, attempt, setAttempt, result }) {
   switch (block.type) {
     case 'intro':
       return <IntroBlock block={block} courseTitle={courseTitle} lessonTitle={lessonTitle} />
@@ -157,7 +230,7 @@ function BlockView({ block, courseTitle, lessonTitle }) {
     case 'recap':
       return <RecapBlock block={block} />
     case 'tryit':
-      return <TryItBlock block={block} />
+      return <TryItBlock block={block} attempt={attempt} setAttempt={setAttempt} result={result} />
     default:
       return null
   }
@@ -404,7 +477,7 @@ function RecapBlock({ block }) {
   )
 }
 
-function TryItBlock({ block }) {
+function TryItBlock({ block, attempt, setAttempt, result }) {
   return (
     <div style={{ paddingTop: 8 }}>
       <Eyebrow>
@@ -420,17 +493,84 @@ function TryItBlock({ block }) {
           background: 'var(--accent-gradient)',
           color: '#fff',
           borderRadius: 20,
-          padding: '22px 22px',
+          padding: '20px 20px',
         }}
       >
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', opacity: 0.9, marginBottom: 8 }}>
           Exercise
         </div>
-        <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, lineHeight: 1.55 }}>{block.prompt}</div>
+        <div style={{ fontFamily: 'var(--font-serif)', fontSize: 17, lineHeight: 1.5 }}>{block.prompt}</div>
       </div>
-      <p style={{ fontSize: 13.5, color: 'var(--muted)', marginTop: 14, lineHeight: 1.5 }}>
-        Completing this lesson marks it done. Head to Practice or today's session to try the exercise.
-      </p>
+
+      {/* write-it-here box */}
+      <div style={{ marginTop: 16 }}>
+        <textarea
+          value={attempt}
+          onChange={(e) => setAttempt(e.target.value)}
+          readOnly={!!result}
+          placeholder="Write your attempt here…"
+          rows={6}
+          style={{
+            width: '100%',
+            background: '#fff',
+            border: '1px solid var(--card-border)',
+            borderRadius: 16,
+            padding: '16px 16px',
+            fontFamily: 'var(--font-serif)',
+            fontSize: 17,
+            lineHeight: 1.7,
+            color: 'var(--prompt-ink)',
+            resize: 'none',
+            outline: 'none',
+          }}
+        />
+      </div>
+
+      {/* feedback appears after "Get feedback" */}
+      {result && (
+        <div style={{ marginTop: 18 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              background: 'var(--accent-tint)',
+              borderRadius: 14,
+              padding: '12px 16px',
+            }}
+          >
+            <span style={{ color: 'var(--accent)', display: 'flex' }}>
+              <IconCheck size={18} strokeWidth={2.4} />
+            </span>
+            <span style={{ fontSize: 13.5, fontWeight: 700, color: 'oklch(0.42 0.05 45)' }}>
+              Saved to your portfolio · {result.words} words · {result.lines} line{result.lines === 1 ? '' : 's'}
+            </span>
+          </div>
+
+          <div style={{ marginTop: 16, fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'oklch(0.42 0.03 55)' }}>
+            A few things I noticed
+          </div>
+          <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {result.notes.map((note, i) => (
+              <div
+                key={i}
+                style={{
+                  background: '#fff',
+                  border: '1px solid var(--card-border)',
+                  borderLeft: '3px solid var(--accent)',
+                  borderRadius: 14,
+                  padding: '14px 16px',
+                  fontSize: 14,
+                  lineHeight: 1.6,
+                  color: 'oklch(0.35 0.03 55)',
+                }}
+              >
+                {note}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
