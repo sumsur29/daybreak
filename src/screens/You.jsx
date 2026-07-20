@@ -19,7 +19,7 @@ export default function You() {
   })
 
   return (
-    <Screen>
+    <Screen withTabBar>
       {/* profile header */}
       <div style={{ background: 'var(--accent-gradient)', color: '#fff', padding: '20px 24px 26px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>

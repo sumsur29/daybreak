@@ -2,42 +2,113 @@ import { useState, useRef, useEffect } from 'react'
 import { IconBook, IconArrowRight, IconCheck, IconFeather } from '../icons/Icons'
 import { useStore } from '../state/store'
 
-// Generates a few genuinely text-aware observations locally (no AI backend in
-// v1) so the exercise gives a real response before the lesson closes.
-function exerciseFeedback(text, courseTitle) {
-  const words = text.trim().split(/\s+/).filter(Boolean).length
-  const lines = text.split('\n').filter((l) => l.trim().length > 0).length
-  const poetry = /poetry/i.test(courseTitle)
-  const notes = []
+// Text analysis helpers — no AI backend in v1, so these inspect the writing
+// for the SPECIFIC craft move each lesson taught, giving targeted feedback
+// instead of generic observations.
+function analyze(text) {
+  const trimmed = text.trim()
+  const lineArr = text.split('\n').filter((l) => l.trim().length > 0)
+  const words = trimmed ? trimmed.split(/\s+/).filter(Boolean).length : 0
+  const lineLengths = lineArr.map((l) => l.trim().split(/\s+/).filter(Boolean).length)
+  const variedLines = lineLengths.length > 1 && Math.max(...lineLengths) - Math.min(...lineLengths) >= 3
+  const endsOnStop = /[.!?]["”]?\s*$/.test(trimmed)
+  const hasDialogue = /["“”]/.test(text)
+  const sentences = trimmed.split(/[.!?]+/).filter((sc) => sc.trim().length > 0)
+  const avgSentence = sentences.length ? Math.round(words / sentences.length) : words
+  const abstractWords = (trimmed.match(/\b(sad|sadness|happy|happiness|love|loss|fear|hope|beauty|beautiful|angry|anger|lonely|loneliness|joy|pain|freedom|honor)\b/gi) || []).length
+  const senseWords = (trimmed.match(/\b(smell|scent|sound|taste|touch|cold|warm|rough|smooth|bitter|sweet|loud|quiet|soft|hard|salt|smoke|bread|rain)\b/gi) || []).length
+  const similes = (trimmed.match(/\b(like|as)\b/gi) || []).length
+  return { text: trimmed, words, lineArr, lineLengths, variedLines, endsOnStop, hasDialogue, avgSentence, abstractWords, senseWords, similes, lines: lineArr.length }
+}
+
+// Per-lesson analyzers. Each returns 2 targeted notes about the actual writing.
+// Keyed by lessonId; falls back to a course-level analyzer.
+const LESSON_ANALYZERS = {
+  // ---- Poetry ----
+  'pf-1': (a) => [
+    a.lines <= 1 ? 'You wrote it as one line — try breaking that same thought across three or four lines and watch which words gain weight.'
+      : `You broke it into ${a.lines} lines. Read each line's last word aloud — those are the words you've given the most emphasis, whether you meant to or not.`,
+    a.variedLines ? 'Your line lengths vary, which already gives the piece a rhythm — good instinct.'
+      : 'Your lines are close to the same length. Try making one much shorter than the rest and see how it stands out.',
+  ],
+  'pf-2': (a) => [
+    a.avgSentence <= 6 ? 'Short, clipped units — this reads fast and percussive. Read it aloud and feel the beat.'
+      : 'Longer phrasing here — it slows the ear down. Make sure that matches the mood you wanted.',
+    'Read it aloud once more and mark any word your tongue trips on — that stumble is the first thing to revise.',
+  ],
+  'pf-3': (a) => [
+    a.lines >= 2 && !a.endsOnStop ? 'You let the ending hang without a full stop — that enjambment keeps the reader leaning forward. Nice.'
+      : a.lines >= 2 ? 'You closed on a full stop. Try breaking your strongest line mid-phrase so the meaning spills into the next.'
+      : 'Try breaking this across more lines, and break one line mid-phrase so the next line surprises the reader.',
+    a.variedLines ? 'The varied line lengths give you real control over pacing here.'
+      : 'Your lines run to similar lengths — vary one sharply to control where the reader speeds up or slows down.',
+  ],
+  'pf-5': (a) => [
+    a.abstractWords > 0 ? `You named a feeling directly (${a.abstractWords} abstract word${a.abstractWords > 1 ? 's' : ''}). Try replacing one with a concrete image that shows it instead.`
+      : 'You avoided naming emotions outright — that\'s the whole game. The reader gets to feel it themselves.',
+    a.senseWords > 0 ? 'There\'s sensory detail here, which grounds the image. Good.'
+      : 'Add one physical, sensory detail — something a person could actually see or touch in this moment.',
+  ],
+  'pf-6': (a) => [
+    a.similes > 0 ? 'You reached for a comparison — try cutting the "like" or "as" to see if the bolder metaphor version hits harder.'
+      : 'No explicit comparison yet. Try one metaphor that claims two things ARE the same, not just similar.',
+    'Read your comparison and ask: does it need the "like" to make sense, or is it stronger as a straight metaphor?',
+  ],
+  // ---- Short Story ----
+  'ssc-3': (a) => [
+    a.hasDialogue ? 'You brought in dialogue — good. Now check: does any line state a feeling outright that could be implied instead?'
+      : 'No dialogue yet. The exercise is about subtext in speech — add a line where a character avoids saying what they mean.',
+    'Strong test: could a different character say your lines unchanged? If so, make them more specific to this person.',
+  ],
+  'ssc-4': (a) => [
+    a.words < 40 ? 'Tight and specific — good. One precise odd detail beats a paragraph of general description.'
+      : 'Watch for general description creeping in. Find the single most specific detail and consider cutting the rest.',
+    'The best detail is slightly strange and implies a history. Do you have one here that makes the reader wonder?',
+  ],
+  // ---- Imagery ----
+  'im-1': (a) => [
+    a.abstractWords > 0 ? `You used ${a.abstractWords} abstract word${a.abstractWords > 1 ? 's' : ''}. Swap one for a concrete, specific thing — a crow, not a bird.`
+      : 'You stayed concrete — no bare abstractions. That\'s exactly the move.',
+    a.senseWords > 0 ? 'Good sensory grounding — the reader can picture this.'
+      : 'Push for a more specific noun or a sharper verb; specificity is what makes an image stick.',
+  ],
+  'im-2': (a) => [
+    a.senseWords >= 2 ? 'You worked in more than one sense — that\'s what makes a scene feel physically present.'
+      : 'Most writing leans on sight. Add one non-visual detail — a smell, a sound, a texture.',
+    'Smell is wired to memory — if you can slip one in, it does outsized emotional work.',
+  ],
+}
+
+function courseFallback(a, courseTitle) {
+  const poetry = /poetry|imagery/i.test(courseTitle)
   if (poetry) {
-    notes.push(
-      lines <= 3
-        ? 'Compact — with this few lines, every break is doing real work. Read it aloud and feel where each one lands.'
-        : 'You gave it room to breathe across several lines. Check whether each break falls where you actually want the reader to pause.'
-    )
-    notes.push(
-      /[.!?]\s*$/.test(text.trim())
-        ? 'You closed on a full stop. Try ending mid-thought sometime and notice how it changes the poem\'s certainty.'
-        : 'Ending without a full stop leaves the last line hanging — often a strength, letting the silence finish the thought.'
-    )
-  } else {
-    notes.push(
-      /["“”]/.test(text)
-        ? 'Good — you brought in dialogue. Voice is doing some of the storytelling work here.'
-        : 'No dialogue yet. Even one line of speech can reveal character faster than description.'
-    )
-    notes.push(
-      words < 60
-        ? 'Short and controlled — that\'s a strength for pacing, not a flaw.'
-        : 'Solid length. Look at your first sentence — is that really where the piece starts?'
-    )
+    return [
+      a.variedLines ? 'Your line lengths vary — that gives the piece rhythm and control.'
+        : a.lines > 1 ? 'Try varying your line lengths more sharply to control the reader\'s pace.'
+        : 'Try breaking this across several lines and notice which words land at the ends.',
+      a.abstractWords > 0 ? 'You named a feeling directly — see if a concrete image could carry it instead.'
+        : 'Nice — you leaned on images over stated emotions.',
+    ]
   }
-  return { words, lines, notes }
+  return [
+    a.hasDialogue ? 'Dialogue is doing some work here — check that it reveals character, not just information.'
+      : 'Consider a line of dialogue — it can reveal character faster than description.',
+    a.avgSentence <= 8 ? 'Short sentences keep this moving quickly — good for tension.'
+      : 'Longer sentences here slow the pace — make sure that suits the moment.',
+  ]
+}
+
+// Generates lesson-specific, text-aware feedback locally (no AI backend in v1).
+function exerciseFeedback(text, courseTitle, lessonId) {
+  const a = analyze(text)
+  const analyzer = LESSON_ANALYZERS[lessonId]
+  const notes = analyzer ? analyzer(a) : courseFallback(a, courseTitle)
+  return { words: a.words, lines: a.lines, notes }
 }
 
 // Renders a rich lesson as a tap-through sequence of section cards.
 // Props: courseTitle, blocks[], onComplete(), onExit()
-export default function LessonPlayer({ courseTitle, title, blocks, alreadyComplete, onComplete, onExit }) {
+export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alreadyComplete, onComplete, onExit }) {
   const [index, setIndex] = useState(0)
   const scrollRef = useRef(null)
   const { saveDraftPiece } = useStore()
@@ -59,7 +130,7 @@ export default function LessonPlayer({ courseTitle, title, blocks, alreadyComple
 
   const submitAttempt = () => {
     if (!attempt.trim()) return
-    const fb = exerciseFeedback(attempt, courseTitle)
+    const fb = exerciseFeedback(attempt, courseTitle, lessonId)
     // save the attempt to the portfolio as a draft so it isn't lost
     const firstLine = attempt.split('\n').find((l) => l.trim().length > 0)
     const derived = firstLine ? firstLine.trim().slice(0, 60) : `${title} — exercise`

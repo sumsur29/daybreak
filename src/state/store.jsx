@@ -4,6 +4,26 @@ import { buildInitialState, titleForLevel } from '../data/seed'
 const STORAGE_KEY = 'daybreak_state_v2'
 const StoreContext = createContext(null)
 
+function todayKey() {
+  return new Date().toISOString().slice(0, 10) // YYYY-MM-DD
+}
+
+// Advances the streak at most once per calendar day, whatever the activity
+// (daily session OR completing a lesson). Idempotent: calling it twice in one
+// day is a no-op. Returns the updated { streak, lastActiveDate } slice.
+function markTodayActive(s) {
+  const today = todayKey()
+  if (s.lastActiveDate === today) {
+    return { streak: s.streak, lastActiveDate: today } // already counted today
+  }
+  const week = s.streak.week
+    ? s.streak.week.map((d) => (d.status === 'today' ? { ...d, status: 'done' } : d))
+    : s.streak.week
+  const current = s.streak.current + 1
+  const streak = { ...s.streak, current, best: Math.max(s.streak.best, current), week }
+  return { streak, lastActiveDate: today }
+}
+
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -94,8 +114,9 @@ export function StoreProvider({ children }) {
         }
         profile = { ...profile, xp, level, xpToNext, title: titleForLevel(level) }
 
-        const week = streak.week.map((d) => (d.status === 'today' ? { ...d, status: 'done' } : d))
-        streak = { ...streak, current: streak.current + 1, best: Math.max(streak.best, streak.current + 1), week }
+        const marked = markTodayActive(s)
+        streak = marked.streak
+        s = { ...s, lastActiveDate: marked.lastActiveDate }
         sessionProgress = { step: 3, completedToday: true }
 
         // nudge the relevant skill up slightly, capped at 5
@@ -158,7 +179,11 @@ export function StoreProvider({ children }) {
         stats = { ...stats, lessons: stats.lessons + 1 }
       }
 
-      return { ...s, courses, profile, stats }
+      // Doing anything today keeps the streak alive — the gesture counts,
+      // whether it's a fresh lesson or a replay. Idempotent per calendar day.
+      const marked = markTodayActive(s)
+
+      return { ...s, courses, profile, stats, streak: marked.streak, lastActiveDate: marked.lastActiveDate }
     })
   }, [])
 
