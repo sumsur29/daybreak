@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import Screen from '../components/Screen'
 import BackTile from '../components/BackTile'
+import LessonPlayer from '../components/LessonPlayer'
 import { useStore } from '../state/store'
+import { getLessonBlocks } from '../data/lessons'
 import { IconBook } from '../icons/Icons'
 
 export default function LessonView() {
@@ -22,11 +24,27 @@ export default function LessonView() {
     )
   }
 
-  const handleDone = () => {
+  const handleComplete = () => {
     startCourseLesson(course.id, lesson.id)
     navigate(`/learn/${course.id}`)
   }
 
+  const rich = getLessonBlocks(lesson.id)
+
+  // Rich, tap-through lesson player
+  if (rich) {
+    return (
+      <LessonPlayer
+        courseTitle={course.title}
+        title={rich.title || lesson.title}
+        blocks={rich.blocks}
+        onComplete={handleComplete}
+        onExit={() => navigate(`/learn/${course.id}`)}
+      />
+    )
+  }
+
+  // Legacy fallback for lessons not yet upgraded to blocks
   return (
     <Screen>
       <div style={{ padding: '14px 22px 0' }}>
@@ -91,7 +109,7 @@ export default function LessonView() {
       >
         <button
           className="press"
-          onClick={handleDone}
+          onClick={handleComplete}
           style={{
             width: '100%',
             background: lesson.done ? 'oklch(0.96 0.02 65)' : 'var(--accent)',
