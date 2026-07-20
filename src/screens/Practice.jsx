@@ -120,7 +120,6 @@ export default function Practice() {
                     Skill drill
                   </span>
                 )}
-                <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)' }}>{p.minutes}</span>
               </div>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: 17, color: 'oklch(0.28 0.03 55)', lineHeight: 1.4 }}>{p.text}</div>
             </button>

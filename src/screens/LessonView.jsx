@@ -54,7 +54,28 @@ export default function LessonView() {
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 25, fontWeight: 700, color: 'var(--ink-strong)', marginTop: 14, lineHeight: 1.2 }}>
           {lesson.title}
         </h2>
-        <p style={{ fontSize: 15.5, lineHeight: 1.7, color: 'oklch(0.4 0.03 55)', marginTop: 14 }}>{lesson.body}</p>
+        {(lesson.paragraphs || [lesson.body]).filter(Boolean).map((p, i) => (
+          <p key={i} style={{ fontSize: 15.5, lineHeight: 1.7, color: 'oklch(0.4 0.03 55)', marginTop: i === 0 ? 14 : 12 }}>
+            {p}
+          </p>
+        ))}
+        {lesson.tryIt && (
+          <div
+            style={{
+              marginTop: 20,
+              background: '#fff',
+              border: '1px solid var(--card-border)',
+              borderLeft: '3px solid var(--accent)',
+              borderRadius: 14,
+              padding: '16px 18px',
+            }}
+          >
+            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'oklch(0.6 0.06 45)', letterSpacing: '0.05em', marginBottom: 8 }}>
+              Try it
+            </div>
+            <p style={{ fontSize: 14.5, lineHeight: 1.6, color: 'oklch(0.35 0.03 55)' }}>{lesson.tryIt}</p>
+          </div>
+        )}
         <div style={{ height: 120 }} />
       </div>
 

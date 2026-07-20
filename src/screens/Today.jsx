@@ -130,7 +130,7 @@ export default function Today() {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'var(--accent)' }}>
-            Today's session · {content.eyebrow} · ~{content.minutes} min
+            Today's session · {content.eyebrow}
           </div>
           <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accent-tint)', padding: '5px 10px', borderRadius: 99 }}>
             {sessionDone ? 'Done ✓' : `+${content.xp} XP`}
@@ -140,9 +140,9 @@ export default function Today() {
           {content.title}
         </div>
         <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <AgendaStep n={1} title="Read the lesson" subtitle={`2 min · ${content.lessonStepLabel}`} filled={sessionProgress.step >= 1 || sessionDone} />
+          <AgendaStep n={1} title="Read the lesson" subtitle={content.lessonStepLabel} filled={sessionProgress.step >= 1 || sessionDone} />
           <AgendaStep n={2} title="Study today's example" subtitle="See the technique in the wild" filled={sessionProgress.step >= 2 || sessionDone} />
-          <AgendaStep n={3} title="Write from a prompt" subtitle="~8 min · your turn" filled={sessionProgress.step >= 3 || sessionDone} />
+          <AgendaStep n={3} title="Write from a prompt" subtitle="Your turn" filled={sessionProgress.step >= 3 || sessionDone} />
         </div>
         <button
           className="press"

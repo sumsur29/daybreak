@@ -4,7 +4,7 @@ import Screen from '../components/Screen'
 import SessionProgressHeader from '../components/SessionProgressHeader'
 import { useStore } from '../state/store'
 import { sessionContent } from '../data/seed'
-import { IconClock, IconSparkleWand, IconDraftPage } from '../icons/Icons'
+import { IconClock, IconSparkleWand, IconDraftPage, IconCheck } from '../icons/Icons'
 
 function useTimer(active) {
   const [seconds, setSeconds] = useState(0)
@@ -16,6 +16,35 @@ function useTimer(active) {
   const mm = String(Math.floor(seconds / 60)).padStart(2, '0')
   const ss = String(seconds % 60).padStart(2, '0')
   return `${mm}:${ss}`
+}
+
+// No AI backend in v1 (see README) — this generates a few genuinely
+// text-aware observations locally, so "Finish & get feedback" produces an
+// actual response instead of just closing the screen.
+function generateFeedback({ genre, text, words, lines }) {
+  const notes = []
+  if (genre === 'poem') {
+    if (lines <= 4) notes.push('Short and controlled — every line is doing real work at this length.')
+    else if (lines <= 10) notes.push('A nice compact shape. See if any single line could be cut without losing the poem.')
+    else notes.push('A longer piece — try reading it aloud and listen for where the energy dips.')
+    notes.push(
+      /[.!?]\s*$/.test(text.trim())
+        ? 'You closed on a full stop — try ending mid-thought sometime and see how it changes the poem.'
+        : 'Ending without a full stop leaves the last line hanging — that\'s often a strength, not an accident.'
+    )
+  } else {
+    notes.push(
+      /["“”]/.test(text)
+        ? 'Good — dialogue is doing some of the storytelling work here.'
+        : 'No dialogue yet. A single line of speech can reveal character fast.'
+    )
+    notes.push(
+      words < 80
+        ? 'Short scene — that\'s a strength for pacing, not a flaw.'
+        : 'Solid length. Check your first sentence — is that really where the story starts?'
+    )
+  }
+  return notes
 }
 
 export default function WriteScreen() {
@@ -44,6 +73,7 @@ export default function WriteScreen() {
   const timer = useTimer(true)
   const [tipVisible, setTipVisible] = useState(false)
   const [savedFlash, setSavedFlash] = useState(false)
+  const [result, setResult] = useState(null) // set once finished — swaps the editor for a feedback view
 
   useEffect(() => {
     textareaRef.current?.focus()
@@ -69,7 +99,15 @@ export default function WriteScreen() {
 
   const handleFinish = () => {
     if (!text.trim()) return
-    finishWriting({ title: deriveTitle(), genre, body: text, isDailySession: mode === 'session', replaceId: resumeId || undefined })
+    const isDailySession = mode === 'session'
+    finishWriting({ title: deriveTitle(), genre, body: text, isDailySession, replaceId: resumeId || undefined })
+    setResult({
+      isDailySession,
+      notes: generateFeedback({ genre, text, words, lines }),
+    })
+  }
+
+  const handleDone = () => {
     navigate(mode === 'session' ? '/' : mode === 'practice' ? '/practice' : '/you')
   }
 
@@ -78,6 +116,95 @@ export default function WriteScreen() {
     saveDraftPiece({ title: deriveTitle(), genre, body: text, replaceId: resumeId || undefined })
     setSavedFlash(true)
     setTimeout(() => setSavedFlash(false), 1400)
+  }
+
+  if (result) {
+    return (
+      <Screen>
+        <SessionProgressHeader centered eyebrow="Nice work!" stepLabel="Piece saved" onBack={handleDone} />
+        <div style={{ padding: '20px 24px 40px' }}>
+          <div
+            style={{
+              background: 'var(--accent-gradient)',
+              color: '#fff',
+              borderRadius: 22,
+              padding: 22,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 14,
+            }}
+          >
+            <div
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: '50%',
+                background: 'rgba(255,255,255,0.22)',
+                border: '2px solid #fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flex: 'none',
+              }}
+            >
+              <IconCheck size={20} strokeWidth={2.4} />
+            </div>
+            <div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 700 }}>
+                {words} words · {lines} line{lines === 1 ? '' : 's'}
+              </div>
+              <div style={{ fontSize: 13, opacity: 0.92, marginTop: 2 }}>
+                {result.isDailySession
+                  ? `+${sessionContent[genre].xp} XP · Day ${state.streak.current} streak`
+                  : 'Saved to your portfolio'}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 20, fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 700, color: 'oklch(0.42 0.03 55)' }}>
+            A few things I noticed
+          </div>
+          <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {result.notes.map((note, i) => (
+              <div
+                key={i}
+                style={{
+                  background: '#fff',
+                  border: '1px solid var(--card-border)',
+                  borderLeft: '3px solid var(--accent)',
+                  borderRadius: 14,
+                  padding: '14px 16px',
+                  fontSize: 14,
+                  lineHeight: 1.6,
+                  color: 'oklch(0.35 0.03 55)',
+                }}
+              >
+                {note}
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="press"
+            onClick={handleDone}
+            style={{
+              width: '100%',
+              marginTop: 24,
+              background: 'var(--accent)',
+              color: '#fff',
+              textAlign: 'center',
+              padding: 16,
+              borderRadius: 16,
+              fontWeight: 700,
+              fontSize: 15,
+              boxShadow: 'var(--shadow-button)',
+            }}
+          >
+            {mode === 'session' ? 'Back to Today' : mode === 'practice' ? 'Back to Practice' : 'Back to portfolio'}
+          </button>
+        </div>
+      </Screen>
+    )
   }
 
   return (
