@@ -1,6 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react'
 import { buildInitialState, titleForLevel } from '../data/seed'
 import { buildSessionFromLesson, pickTodayLessonId, SESSION_ORDER, getLessonBlocks } from '../data/lessons'
+import { wordsOfTheDay, lexEntry } from '../data/lexicon'
+
+// Glossary mastery cycles New → Learning → Known on tap.
+const MASTERY_CYCLE = { new: 'learning', learning: 'known', known: 'new' }
 
 const STORAGE_KEY = 'daybreak_state_v2'
 const StoreContext = createContext(null)
@@ -82,7 +86,9 @@ function loadState() {
     if (!raw) return buildInitialState()
     const parsed = JSON.parse(raw)
     // shallow-merge with seed so newly added fields still exist for returning users
-    return normalizeSessionProgress(rolloverIfNewDay({ ...buildInitialState(), ...parsed }))
+    const merged = { ...buildInitialState(), ...parsed }
+    if (!merged.glossary) merged.glossary = {} // { [wordId]: { mastery, addedAt } }
+    return normalizeSessionProgress(rolloverIfNewDay(merged))
   } catch {
     return buildInitialState()
   }
@@ -269,6 +275,31 @@ export function StoreProvider({ children }) {
     })
   }, [])
 
+  const saveWord = useCallback((wordId) => {
+    setState((s) => {
+      const glossary = s.glossary || {}
+      if (glossary[wordId]) return s // already saved — no-op
+      return { ...s, glossary: { ...glossary, [wordId]: { mastery: 'new', addedAt: new Date().toISOString() } } }
+    })
+  }, [])
+
+  const cycleWordMastery = useCallback((wordId) => {
+    setState((s) => {
+      const glossary = s.glossary || {}
+      const cur = glossary[wordId]
+      if (!cur) return s
+      return { ...s, glossary: { ...glossary, [wordId]: { ...cur, mastery: MASTERY_CYCLE[cur.mastery] || 'learning' } } }
+    })
+  }, [])
+
+  const removeWord = useCallback((wordId) => {
+    setState((s) => {
+      const glossary = { ...(s.glossary || {}) }
+      delete glossary[wordId]
+      return { ...s, glossary }
+    })
+  }, [])
+
   const startCourseLesson = useCallback((courseId, lessonId, recap) => {
     setState((s) => {
       let alreadyDone = false
@@ -337,10 +368,13 @@ export function StoreProvider({ children }) {
       saveDraftPiece,
       markPracticeDone,
       startCourseLesson,
+      saveWord,
+      cycleWordMastery,
+      removeWord,
       wordsInText,
       linesInText,
     }),
-    [state, completeOnboarding, setTodayGenre, setSessionStep, saveDraft, finishWriting, saveDraftPiece, markPracticeDone, startCourseLesson]
+    [state, completeOnboarding, setTodayGenre, setSessionStep, saveDraft, finishWriting, saveDraftPiece, markPracticeDone, startCourseLesson, saveWord, cycleWordMastery, removeWord]
   )
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
