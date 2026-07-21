@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { IconBook, IconArrowRight, IconCheck, IconFeather } from '../icons/Icons'
 import { useStore } from '../state/store'
+import LessonComplete from './LessonComplete'
 
 // Text analysis helpers — no AI backend in v1, so these inspect the writing
 // for the SPECIFIC craft move each lesson taught, giving targeted feedback
@@ -120,6 +121,7 @@ export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alr
   // interactive "your turn" state (only on the tryit card)
   const [attempt, setAttempt] = useState('')
   const [result, setResult] = useState(null) // { words, lines, notes } once submitted
+  const [celebrating, setCelebrating] = useState(false)
 
   // scroll each new section back to top
   useEffect(() => {
@@ -142,7 +144,7 @@ export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alr
 
   const next = () => {
     if (isLast) {
-      onComplete()
+      setCelebrating(true)
     } else {
       setIndex((i) => Math.min(total - 1, i + 1))
     }
@@ -159,6 +161,18 @@ export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alr
   const onTryIt = isLast && block.type === 'tryit'
   const footerAction = onTryIt && !result ? submitAttempt : next
   const footerDisabled = onTryIt && !result && !attempt.trim()
+
+  if (celebrating) {
+    return (
+      <LessonComplete
+        line={attempt}
+        words={result?.words}
+        genre={genreForCourse}
+        alreadyComplete={alreadyComplete}
+        onContinue={onComplete}
+      />
+    )
+  }
 
   return (
     <div
