@@ -62,13 +62,27 @@ function markTodayActive(s) {
   return { streak, lastActiveDate: today }
 }
 
+// Older saved state used a single flat sessionProgress; migrate it to the
+// per-genre shape so poem and story track independently.
+function normalizeSessionProgress(s) {
+  const sp = s.sessionProgress || {}
+  if (sp.byGenre) return s
+  return {
+    ...s,
+    sessionProgress: {
+      step: sp.step || 0,
+      byGenre: { poem: { done: false, practiceDone: false, recap: null }, story: { done: false, practiceDone: false, recap: null } },
+    },
+  }
+}
+
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return buildInitialState()
     const parsed = JSON.parse(raw)
     // shallow-merge with seed so newly added fields still exist for returning users
-    return rolloverIfNewDay({ ...buildInitialState(), ...parsed })
+    return normalizeSessionProgress(rolloverIfNewDay({ ...buildInitialState(), ...parsed }))
   } catch {
     return buildInitialState()
   }
@@ -82,7 +96,7 @@ function rolloverIfNewDay(s) {
   if (s.sessionDay === today) return s // still the same Daybreak day
 
   // fresh session for the new day
-  const sessionProgress = { step: 0, completedToday: false, practiceDone: false, recap: null }
+  const sessionProgress = { step: 0, byGenre: { poem: { done: false, practiceDone: false, recap: null }, story: { done: false, practiceDone: false, recap: null } } }
 
   // streak: if the last active day wasn't yesterday, the run is broken
   let streak = s.streak
@@ -131,7 +145,7 @@ export function StoreProvider({ children }) {
   }, [])
 
   const setTodayGenre = useCallback((genre) => {
-    setState((s) => ({ ...s, todayGenre: genre }))
+    setState((s) => ({ ...s, todayGenre: genre, sessionProgress: { ...s.sessionProgress, step: 0 } }))
   }, [])
 
   const setSessionStep = useCallback((step) => {
@@ -194,17 +208,23 @@ export function StoreProvider({ children }) {
         const marked = markTodayActive(s)
         streak = marked.streak
         s = { ...s, lastActiveDate: marked.lastActiveDate, sessionDay: todayKey() }
-        sessionProgress = { step: 3, completedToday: true, practiceDone: false, recap: null }
-
         // mark the lesson today's session was drawn from as done, so tomorrow
         // advances to the next uncompleted lesson in order. Pin its recap so the
         // Today card can show it once the day's practice is also finished.
+        let recap = null
         const sess = getTodaySession(s, genre)
         if (sess && sess.lessonId) {
           courses = markLessonDone(courses, sess.lessonId)
           const rich = getLessonBlocks(sess.lessonId)
           const rc = rich && rich.blocks.find((b) => b.type === 'recap')
-          if (rc) sessionProgress = { ...sessionProgress, recap: { title: sess.title, heading: rc.heading, points: rc.points } }
+          if (rc) recap = { title: sess.title, heading: rc.heading, points: rc.points }
+        }
+        // Per-genre: completing today's poem session leaves the story session
+        // (and vice-versa) still available for the day.
+        sessionProgress = {
+          ...s.sessionProgress,
+          step: 3,
+          byGenre: { ...s.sessionProgress.byGenre, [genre]: { done: true, practiceDone: false, recap } },
         }
 
         // nudge the relevant skill up slightly, capped at 5
@@ -215,7 +235,8 @@ export function StoreProvider({ children }) {
       // Extra prompt practice done from Today (after the day's session) — saves
       // the piece (handled above) and flips the day into its recap stage.
       if (isTodayExtra) {
-        sessionProgress = { ...sessionProgress, practiceDone: true }
+        const cur = (s.sessionProgress.byGenre && s.sessionProgress.byGenre[genre]) || { done: true, practiceDone: false, recap: null }
+        sessionProgress = { ...sessionProgress, byGenre: { ...sessionProgress.byGenre, [genre]: { ...cur, practiceDone: true } } }
       }
 
       return { ...s, portfolio, profile, streak, sessionProgress, stats, skills, courses }
@@ -240,8 +261,12 @@ export function StoreProvider({ children }) {
     })
   }, [])
 
-  const markPracticeDone = useCallback(() => {
-    setState((s) => ({ ...s, sessionProgress: { ...s.sessionProgress, practiceDone: true } }))
+  const markPracticeDone = useCallback((genre) => {
+    setState((s) => {
+      const g = genre || s.todayGenre
+      const cur = (s.sessionProgress.byGenre && s.sessionProgress.byGenre[g]) || { done: true, practiceDone: false, recap: null }
+      return { ...s, sessionProgress: { ...s.sessionProgress, byGenre: { ...s.sessionProgress.byGenre, [g]: { ...cur, practiceDone: true } } } }
+    })
   }, [])
 
   const startCourseLesson = useCallback((courseId, lessonId, recap) => {

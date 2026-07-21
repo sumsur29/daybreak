@@ -10,11 +10,16 @@ export default function Today() {
   const content = getTodaySession(state)
   const xpPct = Math.min(100, Math.round((profile.xp / profile.xpToNext) * 100))
 
-  const sessionDone = sessionProgress.completedToday
-  const practiceDone = sessionProgress.practiceDone
-  const recap = sessionProgress.recap
-  // The day walks lesson → practice → recap, and only advances the lesson at 6am.
+  const byGenre = sessionProgress.byGenre || {}
+  const gs = byGenre[todayGenre] || { done: false, practiceDone: false, recap: null }
+  const sessionDone = gs.done
+  const practiceDone = gs.practiceDone
+  const recap = gs.recap
+  // Each genre walks lesson → practice → recap on its own; the lesson only
+  // advances at 6am. Poem and story are independent tracks for the day.
   const stage = !sessionDone ? 'session' : !practiceDone ? 'practice' : 'recap'
+  const poemDone = !!(byGenre.poem && byGenre.poem.done)
+  const storyDone = !!(byGenre.story && byGenre.story.done)
 
   return (
     <Screen withTabBar>
@@ -46,18 +51,16 @@ export default function Today() {
         </div>
       </div>
 
-      {/* genre chooser — only while choosing the day's session */}
-      {stage === 'session' && (
-        <div style={{ padding: '22px 20px 8px' }}>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 600, color: 'oklch(0.3 0.03 55)', marginBottom: 12 }}>
-            Today I want to write…
-          </div>
-          <div style={{ display: 'flex', gap: 12 }}>
-            <GenreButton active={todayGenre === 'poem'} onClick={() => setTodayGenre('poem')} icon={<IconFeather size={26} strokeWidth={1.7} />} label="Poem" />
-            <GenreButton active={todayGenre === 'story'} onClick={() => setTodayGenre('story')} icon={<IconBook size={26} strokeWidth={1.7} />} label="Story" />
-          </div>
+      {/* genre chooser — always available; each track is its own daily lesson */}
+      <div style={{ padding: '22px 20px 8px' }}>
+        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 600, color: 'oklch(0.3 0.03 55)', marginBottom: 12 }}>
+          Today I want to write…
         </div>
-      )}
+        <div style={{ display: 'flex', gap: 12 }}>
+          <GenreButton active={todayGenre === 'poem'} done={poemDone} onClick={() => setTodayGenre('poem')} icon={<IconFeather size={26} strokeWidth={1.7} />} label="Poem" />
+          <GenreButton active={todayGenre === 'story'} done={storyDone} onClick={() => setTodayGenre('story')} icon={<IconBook size={26} strokeWidth={1.7} />} label="Story" />
+        </div>
+      </div>
 
       {stage === 'session' && (
         <SessionCard content={content} sessionProgress={sessionProgress} onBegin={() => navigate('/session/lesson')} />
@@ -67,7 +70,7 @@ export default function Today() {
         <PracticeCard
           genre={todayGenre}
           onPractice={() => navigate('/session/write?mode=session-extra')}
-          onSkip={() => markPracticeDone()}
+          onSkip={() => markPracticeDone(todayGenre)}
         />
       )}
 
@@ -92,11 +95,16 @@ export default function Today() {
   )
 }
 
-function GenreButton({ active, onClick, icon, label }) {
+function GenreButton({ active, done, onClick, icon, label }) {
   return (
     <button className="press" onClick={onClick} style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, padding: '18px 18px', borderRadius: 20, background: active ? 'var(--accent)' : 'oklch(0.96 0.02 65)', color: active ? '#fff' : 'oklch(0.42 0.05 45)', boxShadow: active ? 'var(--shadow-button)' : 'none' }}>
       {icon}
       <div style={{ fontSize: 15, fontWeight: 700 }}>{label}</div>
+      {done && (
+        <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: '50%', background: active ? 'rgba(255,255,255,0.28)' : 'var(--accent)', color: '#fff', flex: 'none' }}>
+          <IconCheck size={12} strokeWidth={2.6} />
+        </span>
+      )}
     </button>
   )
 }

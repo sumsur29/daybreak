@@ -455,7 +455,7 @@ export function buildInitialState() {
     profile: blankProfile,
     streak: { ...blankStreak, week: buildBlankWeek() },
     todayGenre: 'poem',
-    sessionProgress: { step: 0, completedToday: false, practiceDone: false, recap: null },
+    sessionProgress: { step: 0, byGenre: { poem: { done: false, practiceDone: false, recap: null }, story: { done: false, practiceDone: false, recap: null } } },
     skills: blankSkills,
     portfolio: blankPortfolio,
     courses: seedCourses,

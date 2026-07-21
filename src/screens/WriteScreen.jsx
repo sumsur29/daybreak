@@ -4,7 +4,8 @@ import Screen from '../components/Screen'
 import SessionProgressHeader from '../components/SessionProgressHeader'
 import { useStore, getTodaySession } from '../state/store'
 import LessonComplete from '../components/LessonComplete'
-import { IconClock, IconSparkleWand, IconDraftPage, IconCheck } from '../icons/Icons'
+import { writingFeedback } from '../data/feedback'
+import { IconClock, IconSparkleWand, IconDraftPage, IconCheck, IconArrowRight } from '../icons/Icons'
 
 function useTimer(active) {
   const [seconds, setSeconds] = useState(0)
@@ -77,7 +78,8 @@ export default function WriteScreen() {
   const timer = useTimer(true)
   const [tipVisible, setTipVisible] = useState(false)
   const [savedFlash, setSavedFlash] = useState(false)
-  const [celebrating, setCelebrating] = useState(false) // true once finished — swaps in the celebration
+  const [celebrating, setCelebrating] = useState(false) // true after feedback — swaps in the celebration
+  const [result, setResult] = useState(null) // feedback shown first, before the celebration
 
   useEffect(() => {
     textareaRef.current?.focus()
@@ -107,7 +109,9 @@ export default function WriteScreen() {
     const isTodayExtra = mode === 'session-extra'
     // commit first so the celebration reads the real, updated streak/XP
     finishWriting({ title: deriveTitle(), genre, body: text, isDailySession, isTodayExtra, replaceId: resumeId || undefined })
-    setCelebrating(true)
+    // feedback first (tuned to today's lesson), then the celebration
+    const lessonId = isDailySession ? getTodaySession(state).lessonId : undefined
+    setResult(writingFeedback({ text, genre, lessonId }))
   }
 
   const handleDone = () => {
@@ -130,6 +134,35 @@ export default function WriteScreen() {
         xpAward={mode === 'session' ? 50 : 0}
         onContinue={handleDone}
       />
+    )
+  }
+
+  if (result) {
+    return (
+      <Screen>
+        <SessionProgressHeader centered eyebrow="A closer read" stepLabel="Before you go" onBack={handleDone} />
+        <div style={{ padding: '18px 22px 40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'var(--accent-tint)', borderRadius: 14, padding: '12px 16px' }}>
+            <span style={{ color: 'var(--accent)', display: 'flex' }}><IconCheck size={18} strokeWidth={2.4} /></span>
+            <span style={{ fontSize: 13.5, fontWeight: 700, color: 'oklch(0.42 0.05 45)' }}>
+              Saved · {result.words} words · {result.lines} line{result.lines === 1 ? '' : 's'}
+            </span>
+          </div>
+          <div style={{ marginTop: 18, fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: 'oklch(0.42 0.03 55)' }}>
+            A few things I noticed
+          </div>
+          <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {result.notes.map((note, i) => (
+              <div key={i} style={{ background: '#fff', border: '1px solid var(--card-border)', borderLeft: '3px solid var(--accent)', borderRadius: 14, padding: '14px 16px', fontSize: 14, lineHeight: 1.6, color: 'oklch(0.35 0.03 55)' }}>
+                {note}
+              </div>
+            ))}
+          </div>
+          <button className="press" onClick={() => setCelebrating(true)} style={{ width: '100%', marginTop: 24, background: 'var(--accent)', color: '#fff', textAlign: 'center', padding: 16, borderRadius: 16, fontWeight: 700, fontSize: 15, boxShadow: 'var(--shadow-button)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            Continue <IconArrowRight size={18} />
+          </button>
+        </div>
+      </Screen>
     )
   }
 

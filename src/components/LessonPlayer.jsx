@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { IconBook, IconArrowRight, IconCheck, IconFeather } from '../icons/Icons'
 import { useStore } from '../state/store'
 import LessonComplete from './LessonComplete'
+import { writingFeedback } from '../data/feedback'
 
 // Text analysis helpers — no AI backend in v1, so these inspect the writing
 // for the SPECIFIC craft move each lesson taught, giving targeted feedback
@@ -132,7 +133,7 @@ export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alr
 
   const submitAttempt = () => {
     if (!attempt.trim()) return
-    const fb = exerciseFeedback(attempt, courseTitle, lessonId)
+    const fb = writingFeedback({ text: attempt, genre: genreForCourse, lessonId })
     // save the attempt to the portfolio as a draft so it isn't lost
     const firstLine = attempt.split('\n').find((l) => l.trim().length > 0)
     const derived = firstLine ? firstLine.trim().slice(0, 60) : `${title} — exercise`
