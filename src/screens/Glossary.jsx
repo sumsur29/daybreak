@@ -21,6 +21,7 @@ export default function Glossary() {
   const glossary = state.glossary || {}
   const pair = wordsOfTheDay(state.sessionDay || new Date().toISOString().slice(0, 10))
   const [reviewing, setReviewing] = useState(false)
+  const [openId, setOpenId] = useState(null)
 
   const savedIds = Object.keys(glossary).sort((a, b) => (glossary[b].addedAt || '').localeCompare(glossary[a].addedAt || ''))
   const knownCount = savedIds.filter((id) => glossary[id].mastery === 'known').length
@@ -78,8 +79,8 @@ export default function Glossary() {
                 <button
                   key={id}
                   className="press"
-                  onClick={() => cycleWordMastery(id)}
-                  title="Tap to grade"
+                  onClick={() => setOpenId(id)}
+                  title="Tap to open"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', border: '1px solid var(--card-border)', borderRadius: 99, padding: '8px 13px' }}
                 >
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: meta.dot, flex: 'none' }} />
@@ -90,9 +91,20 @@ export default function Glossary() {
             })}
           </div>
           <div style={{ marginTop: 12, fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--muted)' }}>
-            {knownCount > 0 ? `${knownCount} known · ` : ''}tap any word to change its grade
+            {knownCount > 0 ? `${knownCount} known · ` : ''}tap a word to see its meaning
           </div>
         </div>
+      )}
+
+      {openId && (
+        <WordDetail
+          id={openId}
+          mastery={(glossary[openId] && glossary[openId].mastery) || 'new'}
+          onGrade={() => cycleWordMastery(openId)}
+          onWrite={(entry) => { setOpenId(null); navigate(`/write?mode=freewrite&seed=${encodeURIComponent(entry.word)}`) }}
+          onRemove={() => { removeWord(openId); setOpenId(null) }}
+          onClose={() => setOpenId(null)}
+        />
       )}
 
       {reviewing && (
@@ -167,6 +179,39 @@ function WordCard({ entry, lang, saved, onSave }) {
       >
         {saved ? (<><IconCheck size={12} strokeWidth={2.6} /> Saved</>) : 'Save to glossary'}
       </button>
+    </div>
+  )
+}
+
+// Opened when a saved word is tapped: its meaning + note, the grade control
+// (moved here so the chip's job is simply "open"), plus Write-with-it / Remove.
+function WordDetail({ id, mastery, onGrade, onWrite, onRemove, onClose }) {
+  const entry = lexEntry(id)
+  const isUrdu = lexLang(id) === 'urdu'
+  if (!entry) return null
+  const meta = MASTERY_META[mastery] || MASTERY_META.new
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 60, background: 'oklch(0.22 0.03 55 / 0.55)', backdropFilter: 'blur(4px)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }} onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} style={{ background: 'var(--canvas)', borderTopLeftRadius: 26, borderTopRightRadius: 26, padding: '10px 20px 26px', boxShadow: '0 -8px 40px oklch(0.2 0.03 55 / 0.2)' }}>
+        <div style={{ width: 40, height: 4, borderRadius: 99, background: 'oklch(0.86 0.02 65)', margin: '0 auto 18px' }} />
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--accent)' }}>{isUrdu ? 'Urdu' : 'English'}</div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 8 }}>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: 32, fontWeight: 600, color: 'oklch(0.26 0.03 55)', lineHeight: 1.05 }}>{entry.word}</div>
+          {entry.pron && <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--muted)' }}>{entry.pron}</div>}
+        </div>
+        <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, lineHeight: 1.4, color: 'oklch(0.24 0.03 55)', marginTop: 16 }}>{entry.meaning}</div>
+        {entry.note && <div style={{ fontSize: 13.5, lineHeight: 1.55, color: 'var(--muted)', marginTop: 10 }}>{entry.note}</div>}
+
+        <button className="press" onClick={onGrade} style={{ marginTop: 20, width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#fff', border: '1px solid var(--card-border)', borderRadius: 14, padding: '12px', fontWeight: 700, fontSize: 13.5, color: 'oklch(0.32 0.03 55)' }}>
+          <span style={{ width: 9, height: 9, borderRadius: '50%', background: meta.dot }} /> {meta.label}
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--muted)', marginLeft: 4 }}>tap to change</span>
+        </button>
+
+        <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
+          <button className="press" onClick={() => onWrite(entry)} style={{ flex: 1, background: 'var(--accent)', color: '#fff', padding: 13, borderRadius: 14, fontWeight: 700, fontSize: 13.5, boxShadow: 'var(--shadow-button)' }}>Write with it</button>
+          <button className="press" onClick={onRemove} style={{ flex: 'none', background: 'transparent', color: 'var(--muted)', padding: '13px 16px', borderRadius: 14, fontWeight: 700, fontSize: 13.5 }}>Remove</button>
+        </div>
+      </div>
     </div>
   )
 }
