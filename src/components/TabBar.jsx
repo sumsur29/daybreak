@@ -46,7 +46,7 @@ export default function TabBar() {
           position: 'fixed',
           left: 0,
           right: 0,
-          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 6px)',
+          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 2px)',
           display: 'flex',
           justifyContent: 'center',
           zIndex: 30,
