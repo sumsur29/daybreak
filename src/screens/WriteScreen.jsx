@@ -2,8 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Screen from '../components/Screen'
 import SessionProgressHeader from '../components/SessionProgressHeader'
-import { useStore } from '../state/store'
-import { sessionContent } from '../data/seed'
+import { useStore, getTodaySession } from '../state/store'
 import { IconClock, IconSparkleWand, IconDraftPage, IconCheck } from '../icons/Icons'
 
 function useTimer(active) {
@@ -60,13 +59,13 @@ export default function WriteScreen() {
   const draftKey = mode === 'session' ? `session-${state.todayGenre}` : mode === 'practice' ? `practice-${promptId}` : resumeId ? `resume-${resumeId}` : 'freewrite'
 
   const promptText = useMemo(() => {
-    if (mode === 'session') return sessionContent[state.todayGenre].write.prompt
+    if (mode === 'session') return getTodaySession(state).write.prompt
     if (mode === 'practice') {
       const p = state.practice.prompts.find((pr) => pr.id === promptId)
       return p ? p.text : ''
     }
     return ''
-  }, [mode, promptId, state.todayGenre, state.practice.prompts])
+  }, [mode, promptId, state])
 
   const [text, setText] = useState(() => state.drafts[draftKey]?.text || resumePiece?.body || '')
   const textareaRef = useRef(null)
@@ -155,7 +154,7 @@ export default function WriteScreen() {
               </div>
               <div style={{ fontSize: 13, opacity: 0.92, marginTop: 2 }}>
                 {result.isDailySession
-                  ? `+${sessionContent[genre].xp} XP · Day ${state.streak.current} streak`
+                  ? `+50 XP · Day ${state.streak.current} streak`
                   : 'Saved to your portfolio'}
               </div>
             </div>

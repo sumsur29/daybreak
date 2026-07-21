@@ -1,14 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
-import { useStore } from '../state/store'
-import { sessionContent } from '../data/seed'
+import { useStore, getTodaySession } from '../state/store'
 import { IconFeather, IconBook, IconSunRays, IconArrowRight, IconRevisit } from '../icons/Icons'
 
 export default function Today() {
   const navigate = useNavigate()
   const { state, setTodayGenre } = useStore()
   const { profile, streak, todayGenre, sessionProgress, yesterdayPiece } = state
-  const content = sessionContent[todayGenre]
+  const content = getTodaySession(state)
   const xpPct = Math.min(100, Math.round((profile.xp / profile.xpToNext) * 100))
   const sessionDone = sessionProgress.completedToday
 

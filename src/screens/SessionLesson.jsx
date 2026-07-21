@@ -1,14 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
 import SessionProgressHeader from '../components/SessionProgressHeader'
-import { useStore } from '../state/store'
-import { sessionContent } from '../data/seed'
+import { useStore, getTodaySession } from '../state/store'
 import { IconFeather } from '../icons/Icons'
 
 export default function SessionLesson() {
   const navigate = useNavigate()
   const { state, setSessionStep } = useStore()
-  const content = sessionContent[state.todayGenre]
+  const content = getTodaySession(state)
   const { lesson } = content
 
   const goNext = () => {

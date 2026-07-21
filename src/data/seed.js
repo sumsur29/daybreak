@@ -465,5 +465,6 @@ export function buildInitialState() {
     drafts: {}, // keyed by draft key -> { text, updatedAt }
     savedRecaps: [], // completed-lesson recaps, newest first, for revision
     lastActiveDate: null, // YYYY-MM-DD of last streak-advancing activity
+    sessionDay: null, // Daybreak day (6am Dubai) the current session belongs to
   }
 }

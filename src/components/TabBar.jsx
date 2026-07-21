@@ -28,18 +28,32 @@ export default function TabBar() {
   const activeIndex = activeIndexFor(pathname)
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        left: 0,
-        right: 0,
-        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
-        display: 'flex',
-        justifyContent: 'center',
-        zIndex: 30,
-        pointerEvents: 'none',
-      }}
-    >
+    <>
+      {/* opaque fade scrim: hides content scrolling under the floating pill */}
+      <div
+        style={{
+          position: 'fixed',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 'calc(env(safe-area-inset-bottom, 0px) + 72px)',
+          background: 'linear-gradient(to top, var(--canvas) 40%, rgba(253,250,246,0))',
+          zIndex: 25,
+          pointerEvents: 'none',
+        }}
+      />
+      <div
+        style={{
+          position: 'fixed',
+          left: 0,
+          right: 0,
+          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
+          display: 'flex',
+          justifyContent: 'center',
+          zIndex: 30,
+          pointerEvents: 'none',
+        }}
+      >
       <nav
         style={{
           position: 'relative',
@@ -101,6 +115,7 @@ export default function TabBar() {
           ))}
         </div>
       </nav>
-    </div>
+      </div>
+    </>
   )
 }

@@ -1,11 +1,49 @@
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react'
 import { buildInitialState, titleForLevel } from '../data/seed'
+import { buildSessionFromLesson, pickTodayLessonId, SESSION_ORDER } from '../data/lessons'
 
 const STORAGE_KEY = 'daybreak_state_v2'
 const StoreContext = createContext(null)
 
+// The "Daybreak day" rolls over at 06:00 Dubai time (GST, UTC+4), not local
+// midnight. We compute it by shifting to UTC+4, then back by 6 hours, so any
+// instant before 6am Dubai still counts as the previous day. Returns YYYY-MM-DD.
 function todayKey() {
-  return new Date().toISOString().slice(0, 10) // YYYY-MM-DD
+  const now = new Date()
+  // shift to Dubai (UTC+4), then subtract 6h so the date flips at 6am not midnight
+  const dubaiMinus6 = new Date(now.getTime() + (4 * 60 - 6 * 60) * 60 * 1000)
+  return dubaiMinus6.toISOString().slice(0, 10)
+}
+
+// The set of lesson ids the user has completed (via Learn or a daily session).
+function doneLessonIds(s) {
+  const set = new Set()
+  s.courses.forEach((c) => c.lessons.forEach((l) => l.done && set.add(l.id)))
+  return set
+}
+
+// Flip a lesson to done and refresh its course's done-count. No XP side effects
+// (used when a daily session completes, where session XP is handled separately).
+function markLessonDone(courses, lessonId) {
+  return courses.map((c) => {
+    if (!c.lessons.some((l) => l.id === lessonId)) return c
+    const lessons = c.lessons.map((l) => (l.id === lessonId ? { ...l, done: true } : l))
+    return { ...c, lessons, done: lessons.filter((l) => l.done).length }
+  })
+}
+
+// Today's session = the next uncompleted lesson in the genre's order. Once every
+// lesson is done, rotate by the Daybreak day so replays still vary.
+export function getTodaySession(s, genreArg) {
+  const genre = genreArg || s.todayGenre
+  const done = doneLessonIds(s)
+  let id = pickTodayLessonId(done, genre)
+  if (!id) {
+    const order = SESSION_ORDER[genre] || SESSION_ORDER.poem
+    const dayNum = Math.floor(Date.parse(todayKey()) / 86400000)
+    id = order[dayNum % order.length]
+  }
+  return buildSessionFromLesson(id, genre)
 }
 
 // Advances the streak at most once per calendar day, whatever the activity
@@ -30,10 +68,35 @@ function loadState() {
     if (!raw) return buildInitialState()
     const parsed = JSON.parse(raw)
     // shallow-merge with seed so newly added fields still exist for returning users
-    return { ...buildInitialState(), ...parsed }
+    return rolloverIfNewDay({ ...buildInitialState(), ...parsed })
   } catch {
     return buildInitialState()
   }
+}
+
+// If the Daybreak day (6am Dubai boundary) has advanced since the last session,
+// reset today's session so a fresh one is available. Also breaks the streak if
+// more than one day was skipped.
+function rolloverIfNewDay(s) {
+  const today = todayKey()
+  if (s.sessionDay === today) return s // still the same Daybreak day
+
+  // fresh session for the new day
+  const sessionProgress = { step: 0, completedToday: false }
+
+  // streak: if the last active day wasn't yesterday, the run is broken
+  let streak = s.streak
+  if (s.lastActiveDate) {
+    const y = new Date()
+    const yKey = new Date(y.getTime() + (4 * 60 - 6 * 60) * 60 * 1000 - 24 * 60 * 60 * 1000)
+      .toISOString()
+      .slice(0, 10)
+    if (s.lastActiveDate !== yKey && s.lastActiveDate !== today) {
+      streak = { ...streak, current: 0 }
+    }
+  }
+
+  return { ...s, sessionDay: today, sessionProgress, streak }
 }
 
 export function StoreProvider({ children }) {
@@ -46,6 +109,18 @@ export function StoreProvider({ children }) {
       // storage unavailable (private mode / quota) — fail silently, session still works
     }
   }, [state])
+
+  // If the app is left open across the 6am Dubai rollover, refresh the session.
+  useEffect(() => {
+    const check = () => setState((s) => rolloverIfNewDay(s))
+    const id = setInterval(check, 60 * 1000) // check each minute
+    const onVisible = () => document.visibilityState === 'visible' && check()
+    document.addEventListener('visibilitychange', onVisible)
+    return () => {
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', onVisible)
+    }
+  }, [])
 
   const completeOnboarding = useCallback((name) => {
     setState((s) => ({
@@ -103,6 +178,8 @@ export function StoreProvider({ children }) {
         lessons: isDailySession ? stats.lessons + 1 : stats.lessons,
       }
 
+      let courses = s.courses
+
       if (isDailySession) {
         let xp = profile.xp + sessionContentXp(s)
         let level = profile.level
@@ -116,15 +193,20 @@ export function StoreProvider({ children }) {
 
         const marked = markTodayActive(s)
         streak = marked.streak
-        s = { ...s, lastActiveDate: marked.lastActiveDate }
+        s = { ...s, lastActiveDate: marked.lastActiveDate, sessionDay: todayKey() }
         sessionProgress = { step: 3, completedToday: true }
+
+        // mark the lesson today's session was drawn from as done, so tomorrow
+        // advances to the next uncompleted lesson in order
+        const sess = getTodaySession(s, genre)
+        if (sess && sess.lessonId) courses = markLessonDone(courses, sess.lessonId)
 
         // nudge the relevant skill up slightly, capped at 5
         const skillName = genre === 'poem' ? 'Line breaks' : 'Dialogue'
         skills = s.skills.map((sk) => (sk.name === skillName && sk.rating < 5 ? { ...sk, rating: sk.rating + 1 } : sk))
       }
 
-      return { ...s, portfolio, profile, streak, sessionProgress, stats, skills }
+      return { ...s, portfolio, profile, streak, sessionProgress, stats, skills, courses }
     })
   }, [])
 

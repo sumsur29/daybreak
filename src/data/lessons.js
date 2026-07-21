@@ -2034,3 +2034,109 @@ export const lessonContent = {
 export function getLessonBlocks(lessonId) {
   return lessonContent[lessonId] || null
 }
+
+// ---------------------------------------------------------------------------
+// Daily-session generation: the "Today" session is drawn from the lessons,
+// in curriculum order, skipping any already completed. Each lesson's blocks
+// are mapped into the 3-step session shape (read → example → write prompt).
+// ---------------------------------------------------------------------------
+
+// Order the daily session walks through, per genre.
+export const SESSION_ORDER = {
+  poem: ['pf-1', 'pf-2', 'pf-3', 'pf-4', 'pf-5', 'pf-6', 'pf-7', 'pf-8', 'pf-9', 'pf-10', 'im-1', 'im-2', 'im-3', 'im-4', 'im-5', 'im-6'],
+  story: ['ssc-1', 'ssc-2', 'ssc-3', 'ssc-4', 'ssc-5', 'ssc-6', 'ssc-7', 'ssc-8'],
+}
+
+function lineText(l) {
+  return typeof l === 'string' ? l : l.text
+}
+function lineMark(l) {
+  return typeof l === 'string' ? null : l.mark
+}
+
+// First lesson in genre order that isn't in doneIds; null when all are done.
+export function pickTodayLessonId(doneIds, genre) {
+  const order = SESSION_ORDER[genre] || SESSION_ORDER.poem
+  return order.find((id) => !doneIds.has(id)) || null
+}
+
+// Maps one lesson's rich blocks into the { lesson, example, write } session shape
+// the three session screens already consume.
+export function buildSessionFromLesson(lessonId, genre) {
+  const lesson = lessonContent[lessonId]
+  if (!lesson) return null
+  const blocks = lesson.blocks
+  const concepts = blocks.filter((b) => b.type === 'concept')
+  const example = blocks.find((b) => b.type === 'example')
+  const compare = blocks.find((b) => b.type === 'compare')
+  const callout = blocks.find((b) => b.type === 'callout')
+  const tryit = blocks.find((b) => b.type === 'tryit')
+
+  // read-step paragraphs: first one or two concepts, capped at 3 paragraphs
+  let paragraphs = []
+  if (concepts[0]) paragraphs = paragraphs.concat(concepts[0].body)
+  if (paragraphs.length < 2 && concepts[1]) paragraphs = paragraphs.concat(concepts[1].body)
+  paragraphs = paragraphs.slice(0, 3)
+
+  // "notice" callout on the read step — prefer a poem line with an accent mark,
+  // else a punchy callout, else the last line of an example/compare.
+  let noticeLabel = 'Notice'
+  let noticeLines = []
+  let noticeHighlight = ''
+  const markedBlock =
+    example && example.lines.some(lineMark)
+      ? { heading: example.heading, lines: example.lines }
+      : compare && compare.right.lines.some(lineMark)
+        ? { heading: compare.heading, lines: compare.right.lines }
+        : null
+  if (markedBlock) {
+    noticeLabel = markedBlock.heading || 'Notice'
+    const lines = markedBlock.lines
+    const idx = lines.findIndex(lineMark)
+    noticeHighlight = lineMark(lines[idx])
+    noticeLines = lines
+      .slice(0, idx)
+      .filter((l) => lineText(l) !== '')
+      .map(lineText)
+      .slice(-3)
+  } else if (callout) {
+    noticeLabel = callout.label || 'Key idea'
+    noticeHighlight = callout.text
+  } else if (example || compare) {
+    const src = example ? example.lines : compare.right.lines
+    const nonEmpty = src.filter((l) => lineText(l) !== '')
+    noticeHighlight = lineText(nonEmpty[nonEmpty.length - 1])
+    noticeLines = nonEmpty.slice(0, -1).map(lineText).slice(-3)
+  }
+
+  // example step (gradient card)
+  const exTitle = genre === 'poem' ? "Today's poem" : "Today's example"
+  let ex
+  if (example) {
+    ex = { title: exTitle, poemTitle: example.heading, lines: example.lines.map(lineText), note: example.caption }
+  } else if (compare) {
+    ex = { title: exTitle, poemTitle: compare.heading, lines: compare.right.lines.map(lineText), note: compare.caption }
+  } else {
+    ex = { title: 'The key idea', poemTitle: lesson.title, lines: callout ? [callout.text] : [], note: concepts[0] ? concepts[0].body[0] : '' }
+  }
+
+  return {
+    lessonId,
+    eyebrow: genre === 'poem' ? 'Poetry' : 'Fiction',
+    xp: 50,
+    title: lesson.title,
+    lessonStepLabel: concepts[0] ? concepts[0].heading : lesson.title,
+    lesson: {
+      chip: 'Lesson',
+      paragraphs,
+      noticeLabel,
+      noticeLines,
+      noticeHighlight,
+    },
+    example: ex,
+    write: {
+      promptLabel: 'Prompt',
+      prompt: tryit ? tryit.prompt : 'Write freely for a few minutes, using today\'s idea.',
+    },
+  }
+}
