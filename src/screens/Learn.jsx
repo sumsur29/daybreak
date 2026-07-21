@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
 import { useStore } from '../state/store'
-import { IconFlame, IconCheck, IconArrowRight, IconLock } from '../icons/Icons'
+import { IconFlame, IconCheck, IconArrowRight, IconLock, IconMoon } from '../icons/Icons'
+import { wordsOfTheDay } from '../data/lexicon'
 
 // The Learn screen is a plate developing in a darkroom: each course carries a
 // public-domain masterwork that emerges from the ink as you finish its lessons.
@@ -52,6 +53,9 @@ export default function Learn() {
 
   return (
     <Screen withTabBar>
+      {/* word of the day → glossary */}
+      <WordStrip navigate={navigate} pair={wordsOfTheDay(state.sessionDay || new Date().toISOString().slice(0, 10))} savedCount={Object.keys(state.glossary || {}).length} />
+
       {/* header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px 0' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--accent)' }}>Learn</div>
@@ -140,5 +144,30 @@ export default function Learn() {
         </>
       )}
     </Screen>
+  )
+}
+
+// Slim Word-of-day teaser at the top of Learn — the doorway to the Glossary.
+// Shows today's two words; tap to open the full /glossary room.
+function WordStrip({ navigate, pair, savedCount }) {
+  return (
+    <button
+      className="press"
+      onClick={() => navigate('/glossary')}
+      style={{ display: 'flex', alignItems: 'center', gap: 12, width: 'calc(100% - 40px)', margin: '14px 20px 0', background: '#fff', border: '1px solid var(--card-border)', borderRadius: 18, padding: '12px 14px', textAlign: 'left' }}
+    >
+      <div style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--accent-tint)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+        <IconMoon size={19} strokeWidth={1.8} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--accent)' }}>Word of the day</div>
+        <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: 'oklch(0.28 0.03 55)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {pair.urdu.word} · {pair.english.word}
+        </div>
+      </div>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 700, color: 'var(--accent)', flex: 'none' }}>
+        {savedCount > 0 ? `Glossary · ${savedCount}` : 'Glossary'} <IconArrowRight size={14} strokeWidth={2.2} />
+      </span>
+    </button>
   )
 }

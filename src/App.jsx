@@ -9,6 +9,7 @@ import Learn from './screens/Learn'
 import CourseDetail from './screens/CourseDetail'
 import LessonView from './screens/LessonView'
 import Practice from './screens/Practice'
+import Glossary from './screens/Glossary'
 import Progress from './screens/Progress'
 import You from './screens/You'
 import PortfolioItem from './screens/PortfolioItem'
@@ -32,6 +33,7 @@ function AppShell() {
         <Route path="/learn/:courseId" element={<CourseDetail />} />
         <Route path="/learn/:courseId/:lessonId" element={<LessonView />} />
         <Route path="/practice" element={<Practice />} />
+        <Route path="/glossary" element={<Glossary />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/you" element={<You />} />
         <Route path="/you/:pieceId" element={<PortfolioItem />} />
@@ -45,7 +47,14 @@ export default function App() {
     <StoreProvider>
       <div
         style={{
-          height: '100svh',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          // 100dvh (dynamic viewport height) tracks Safari's collapsing/expanding
+          // toolbar in real time; fixed+inset:0 alone leaves a gap when the
+          // toolbar animates after the fixed element's size was first computed.
+          height: '100dvh',
           background: 'var(--canvas)',
           overflow: 'hidden',
         }}
