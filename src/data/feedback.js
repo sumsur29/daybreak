@@ -212,3 +212,79 @@ export function writingFeedback({ text, genre, lessonId }) {
   }
   return { words: a.words, lines: a.lines, notes: notes.slice(0, 4) }
 }
+
+// ---------------------------------------------------------------------------
+// Portfolio-level analysis for the Writer's dashboard (Progress screen).
+// Measures OUTPUT, not correctness: words & pieces this week, a per-day chart,
+// and the single sharpest line surfaced from the week's writing.
+// ---------------------------------------------------------------------------
+
+function countWords(t) {
+  const s = (t || '').trim()
+  return s ? s.split(/\s+/).filter(Boolean).length : 0
+}
+
+// Scores every candidate line/sentence across the given pieces and returns the
+// strongest — favouring image-rich, sensory, well-sized lines over bare
+// statements of feeling. Returns { line, title } or null.
+export function sharpestLine(pieces) {
+  let best = null
+  let bestScore = -1
+  const wc = (t) => t.split(/\s+/).filter(Boolean).length
+  for (const p of pieces || []) {
+    const lines = (p.body || '').split('\n').map((l) => l.trim()).filter(Boolean)
+    const cands = new Set()
+    lines.forEach((l, i) => {
+      const n = wc(l)
+      if (n >= 4 && n <= 16) cands.add(l)
+      // prose line: offer its sentences too
+      if (n > 16) {
+        l.split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter((x) => wc(x) >= 4 && wc(x) <= 16).forEach((x) => cands.add(x))
+      }
+      // a two-line fragment reads as a fuller thought — offer it as well
+      if (i < lines.length - 1) {
+        const pair = l + '\n' + lines[i + 1]
+        if (wc(pair) >= 6 && wc(pair) <= 16) cands.add(pair)
+      }
+    })
+    for (const line of cands) {
+      const toks = line.toLowerCase().replace(/\n/g, ' ').match(/[a-z']+/g) || []
+      const n = wc(line)
+      let score = n >= 6 && n <= 12 ? 3 : 1
+      let sense = 0
+      for (const s of Object.keys(SENSES)) sense += toks.filter((w) => SENSES[s].has(w)).length
+      score += sense * 2
+      score -= toks.filter((w) => ABSTRACTIONS.has(w)).length
+      score += Math.min(toks.filter((w) => w.length > 4 && !STOP.has(w)).length, 3)
+      if (/[—–,]/.test(line)) score += 1
+      if (line.includes('\n')) score += 1 // prefer a two-line fragment
+      if (score > bestScore) {
+        bestScore = score
+        best = { line: line.replace(/^["“]|["”]$/g, ''), title: p.title || 'Untitled' }
+      }
+    }
+  }
+  return best
+}
+
+export function weeklyOutput(portfolio) {
+  const now = Date.now()
+  const dayMs = 86400000
+  const recent = (portfolio || [])
+    .map((p) => ({ ...p, ts: p.updatedAt ? Date.parse(p.updatedAt) : NaN }))
+    .filter((p) => !Number.isNaN(p.ts))
+  const thisWeek = recent.filter((p) => p.ts >= now - 7 * dayMs)
+  const totalWords = thisWeek.reduce((a, p) => a + countWords(p.body), 0)
+
+  const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const todayStart = (() => { const d = new Date(now); d.setHours(0, 0, 0, 0); return d.getTime() })()
+  const perDay = []
+  for (let i = 6; i >= 0; i--) {
+    const start = todayStart - i * dayMs
+    const words = recent.filter((p) => p.ts >= start && p.ts < start + dayMs).reduce((a, p) => a + countWords(p.body), 0)
+    perDay.push({ label: DOW[new Date(start).getDay()][0], words, today: i === 0 })
+  }
+  const daysWritten = perDay.filter((d) => d.words > 0).length
+
+  return { totalWords, pieces: thisWeek.length, perDay, daysWritten, sharpest: sharpestLine(thisWeek) }
+}
