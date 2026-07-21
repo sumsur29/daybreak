@@ -19,7 +19,7 @@ export default function Today() {
           margin: '16px 18px 0',
           background: 'var(--accent-gradient)',
           borderRadius: 26,
-          padding: '20px 22px',
+          padding: '16px 22px',
           color: '#fff',
         }}
       >
