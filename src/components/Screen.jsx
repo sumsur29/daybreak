@@ -1,19 +1,16 @@
 import TabBar from './TabBar'
 import ProfileButton from './ProfileButton'
 
-// withTabBar screens (Today, Learn, Practice, Progress) get the floating glass
-// nav pill and the top-right profile avatar as fixed overlays — both escape
-// this container's scroll/clip since nothing here sets a transform. Extra
-// top/bottom padding on the scrollable content keeps real content clear of
-// where those floating elements sit, regardless of how tall the content is.
+// Flex column filling the (stable-on-first-paint) small viewport height. The
+// nav is a normal flex child at the bottom — laid out, not position:fixed — so
+// it physically can't be mispositioned by iOS viewport-height timing.
 export default function Screen({ children, withTabBar = false, background = 'var(--canvas)' }) {
   return (
-    <>
+    <div style={{ height: '100svh', display: 'flex', flexDirection: 'column', background }}>
       <div
         style={{
-          position: 'absolute',
-          inset: 0,
-          background,
+          flex: 1,
+          minHeight: 0,
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
           paddingTop: withTabBar
@@ -22,10 +19,9 @@ export default function Screen({ children, withTabBar = false, background = 'var
         }}
       >
         {children}
-        {withTabBar && <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 132px)' }} />}
       </div>
       {withTabBar && <TabBar />}
       {withTabBar && <ProfileButton />}
-    </>
+    </div>
   )
 }

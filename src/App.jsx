@@ -1,6 +1,5 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { StoreProvider, useStore } from './state/store'
-import useViewportFix from './useViewportFix'
 import Onboarding from './screens/Onboarding'
 import Today from './screens/Today'
 import SessionLesson from './screens/SessionLesson'
@@ -42,13 +41,13 @@ function AppShell() {
 }
 
 export default function App() {
-  useViewportFix()
   return (
     <StoreProvider>
       <div
         style={{
-          minHeight: "100dvh",
-          background: "var(--canvas)",
+          height: '100svh',
+          background: 'var(--canvas)',
+          overflow: 'hidden',
         }}
       >
         <AppShell />
