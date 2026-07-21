@@ -213,17 +213,18 @@ function trailingCommon(a, b) {
   return { common, aIdx: i, bIdx: j } // aIdx/bIdx point at the word BEFORE the radif (the qafia)
 }
 
-// Rhyme key: from the last vowel group of a word to its end. bekaar→aar, deewaar→aar.
+// Rhyme key: from the last vowel of the (vowel-normalised) word to its end.
+// Roman Urdu spells long vowels inconsistently — deewar / deewaar / bekaar all
+// rhyme — so we collapse doubled vowels before comparing. Leniency is deliberate:
+// wrongly rejecting a correct rhyme is far worse here than accepting a near one.
 function ghRhymeKey(word) {
   if (!word) return ''
-  const w = word.toLowerCase()
+  let w = word.toLowerCase().replace(/[^a-z]/g, '').replace(/([aeiou])\1+/g, '$1')
+  if (!w) return ''
   let last = -1
   for (let k = 0; k < w.length; k++) if (GH_VOWELS.includes(w[k])) last = k
   if (last === -1) return w.slice(-2)
-  // walk back over a contiguous vowel cluster so "aa"/"ee" count as one nucleus
-  let start = last
-  while (start > 0 && GH_VOWELS.includes(w[start - 1])) start--
-  return w.slice(start)
+  return w.slice(last)
 }
 
 // Rough syllable count ≈ number of vowel groups.
