@@ -16,10 +16,10 @@ export default function Today() {
       {/* hero band */}
       <div
         style={{
-          margin: '16px 18px 0',
+          margin: '10px 18px 0',
           background: 'var(--accent-gradient)',
           borderRadius: 26,
-          padding: '16px 22px',
+          padding: '13px 22px',
           color: '#fff',
         }}
       >
