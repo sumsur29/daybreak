@@ -1,5 +1,4 @@
 import TabBar from './TabBar'
-import NavDebug from './NavDebug'
 import ProfileButton from './ProfileButton'
 
 // withTabBar screens (Today, Learn, Practice, Progress) get the floating glass
@@ -26,7 +25,6 @@ export default function Screen({ children, withTabBar = false, background = 'var
         {withTabBar && <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 132px)' }} />}
       </div>
       {withTabBar && <TabBar />}
-      {withTabBar && <NavDebug />}
       {withTabBar && <ProfileButton />}
     </>
   )
