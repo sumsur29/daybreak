@@ -132,7 +132,7 @@ export default function Today() {
           margin: '12px 20px 0',
           background: '#fff',
           borderRadius: 24,
-          padding: 22,
+          padding: '22px 22px 16px',
           boxShadow: 'var(--shadow-card)',
           border: '1px solid var(--card-border)',
         }}
@@ -158,7 +158,7 @@ export default function Today() {
           onClick={() => navigate(sessionDone ? '/practice' : '/session/lesson')}
           style={{
             width: '100%',
-            marginTop: 20,
+            marginTop: 14,
             background: 'var(--accent)',
             color: '#fff',
             textAlign: 'center',
