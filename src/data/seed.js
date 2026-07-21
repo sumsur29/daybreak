@@ -452,6 +452,8 @@ export const seedPractice = {
     { id: 'pr-color', kind: 'poem', text: 'Describe a color to someone who has never seen.' },
     { id: 'pr-lift', kind: 'story', text: 'Two strangers are stuck in a lift. One is lying.' },
     { id: 'pr-grief', kind: 'drill', text: 'Show, don\'t tell: convey grief without the word "sad".' },
+    { id: 'pr-sher-raat', kind: 'sher', text: 'Write one sher on the night (raat) — first line sets the scene, second line turns it.' },
+    { id: 'pr-sher-radif', kind: 'sher', text: 'Pick a radif — "hai" or "nahin" — and write a matla whose both lines end on it.' },
   ],
 }
 
@@ -474,7 +476,7 @@ export function buildInitialState() {
     profile: blankProfile,
     streak: { ...blankStreak, week: buildBlankWeek() },
     todayGenre: 'poem',
-    sessionProgress: { step: 0, byGenre: { poem: { done: false, practiceDone: false, recap: null }, story: { done: false, practiceDone: false, recap: null } } },
+    sessionProgress: { step: 0, byGenre: { poem: { done: false, practiceDone: false, recap: null }, story: { done: false, practiceDone: false, recap: null }, sher: { done: false, practiceDone: false, recap: null } } },
     skills: blankSkills,
     portfolio: blankPortfolio,
     courses: seedCourses,

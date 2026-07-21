@@ -129,10 +129,10 @@ export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alr
     scrollRef.current?.scrollTo({ top: 0, behavior: 'auto' })
   }, [index])
 
-  // Ghazal is poetry — file its pieces under Poems. The form-checker still
-  // fires via the 'gh-' lessonId in writingFeedback. Pass 2 splits out a
-  // dedicated 'sher' genre with its own Today track + portfolio filter.
-  const genreForCourse = /poetry|poem|ghazal|sher/i.test(courseTitle) ? 'poem' : 'story'
+  // Ghazal & Sher course files its pieces under the 'sher' genre (its own
+  // Today track + Ghazals filter in You). The form-checker fires via the
+  // 'gh-' lessonId in writingFeedback regardless.
+  const genreForCourse = /ghazal|sher/i.test(courseTitle) ? 'sher' : /poetry|poem/i.test(courseTitle) ? 'poem' : 'story'
 
   const submitAttempt = () => {
     if (!attempt.trim()) return

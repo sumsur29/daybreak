@@ -9,6 +9,15 @@ const base = (strokeWidth) => ({
   strokeLinejoin: 'round',
 })
 
+export function IconMoon({ size = 22, strokeWidth = 1.7 }) {
+  // Crescent — used for "Sher"/ghazal (raat, chaand: the ghazal's nocturnal mood).
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(strokeWidth)}>
+      <path d="M20 14.5A8 8 0 0 1 9.5 4 7 7 0 1 0 20 14.5z" />
+    </svg>
+  )
+}
+
 export function IconFeather({ size = 22, strokeWidth = 1.7 }) {
   // Pen-nib mark, used for "Poem" throughout — kept the export name so every
   // call site (Today, Practice, Learn, You, session screens) picks it up automatically.

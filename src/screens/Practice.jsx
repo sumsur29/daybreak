@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
 import { useStore } from '../state/store'
-import { IconPencilPage, IconFeather, IconBook } from '../icons/Icons'
+import { IconPencilPage, IconFeather, IconBook, IconMoon } from '../icons/Icons'
 
 const segments = ['Prompts', 'Drills', 'Sprints']
 
@@ -12,7 +12,7 @@ export default function Practice() {
   const [segment, setSegment] = useState('Prompts')
 
   const list = state.practice.prompts.filter((p) => {
-    if (segment === 'Prompts') return p.kind === 'poem' || p.kind === 'story'
+    if (segment === 'Prompts') return p.kind === 'poem' || p.kind === 'story' || p.kind === 'sher'
     if (segment === 'Drills') return p.kind === 'drill'
     return true // Sprints: reuse the same pool as a stand-in until timed sprints are added
   })
@@ -95,6 +95,7 @@ export default function Practice() {
         {list.map((p) => {
           const isPoem = p.kind === 'poem'
           const isStory = p.kind === 'story'
+          const isSher = p.kind === 'sher'
           return (
             <button
               key={p.id}
@@ -115,7 +116,13 @@ export default function Practice() {
                     Story
                   </span>
                 )}
-                {!isPoem && !isStory && (
+                {isSher && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--accent)', background: 'var(--accent-tint)', padding: '4px 9px', borderRadius: 99 }}>
+                    <IconMoon size={11} strokeWidth={2.1} />
+                    Ghazal
+                  </span>
+                )}
+                {!isPoem && !isStory && !isSher && (
                   <span style={{ fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'oklch(0.42 0.05 45)', background: 'oklch(0.96 0.02 65)', padding: '4px 9px', borderRadius: 99 }}>
                     Skill drill
                   </span>

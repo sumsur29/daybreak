@@ -38,7 +38,7 @@ export default function LessonComplete({ line, words, genre, xpAward = 0, onCont
   const hasLine = shown.length > 0
   const firstLine = hasLine ? shown[0] : ''
   const caption = firstLine.slice(0, 46)
-  const genreWord = genre === 'poem' ? 'poem' : 'story'
+  const genreWord = genre === 'poem' ? 'poem' : genre === 'sher' ? 'sher' : 'story'
 
   useEffect(() => {
     if (!xpAward) return

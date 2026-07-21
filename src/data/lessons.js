@@ -2214,6 +2214,7 @@ export function getLessonBlocks(lessonId) {
 export const SESSION_ORDER = {
   poem: ['pf-1', 'pf-2', 'pf-3', 'pf-4', 'pf-5', 'pf-6', 'pf-7', 'pf-8', 'pf-9', 'pf-10', 'im-1', 'im-2', 'im-3', 'im-4', 'im-5', 'im-6'],
   story: ['ssc-1', 'ssc-2', 'ssc-3', 'ssc-4', 'ssc-5', 'ssc-6', 'ssc-7', 'ssc-8'],
+  sher: ['gh-1', 'gh-2', 'gh-3', 'gh-4', 'gh-5', 'gh-6', 'gh-7', 'gh-8', 'gh-9', 'gh-10'],
 }
 
 function lineText(l) {
@@ -2279,7 +2280,7 @@ export function buildSessionFromLesson(lessonId, genre) {
   }
 
   // example step (gradient card)
-  const exTitle = genre === 'poem' ? "Today's poem" : "Today's example"
+  const exTitle = genre === 'poem' ? "Today's poem" : genre === 'sher' ? "Today's sher" : "Today's example"
   let ex
   if (example) {
     ex = { title: exTitle, poemTitle: example.heading, lines: example.lines.map(lineText), note: example.caption }
@@ -2291,7 +2292,7 @@ export function buildSessionFromLesson(lessonId, genre) {
 
   return {
     lessonId,
-    eyebrow: genre === 'poem' ? 'Poetry' : 'Fiction',
+    eyebrow: genre === 'poem' ? 'Poetry' : genre === 'sher' ? 'Ghazal' : 'Fiction',
     xp: 50,
     title: lesson.title,
     lessonStepLabel: concepts[0] ? concepts[0].heading : lesson.title,

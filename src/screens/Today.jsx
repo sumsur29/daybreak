@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
 import { useStore, getTodaySession } from '../state/store'
-import { IconFeather, IconBook, IconSunRays, IconArrowRight, IconRevisit, IconCheck } from '../icons/Icons'
+import { IconFeather, IconBook, IconMoon, IconSunRays, IconArrowRight, IconRevisit, IconCheck } from '../icons/Icons'
 
 export default function Today() {
   const navigate = useNavigate()
@@ -20,6 +20,7 @@ export default function Today() {
   const stage = !sessionDone ? 'session' : !practiceDone ? 'practice' : 'recap'
   const poemDone = !!(byGenre.poem && byGenre.poem.done)
   const storyDone = !!(byGenre.story && byGenre.story.done)
+  const sherDone = !!(byGenre.sher && byGenre.sher.done)
 
   return (
     <Screen withTabBar>
@@ -56,9 +57,10 @@ export default function Today() {
         <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 600, color: 'oklch(0.3 0.03 55)', marginBottom: 12 }}>
           Today I want to write…
         </div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          <GenreButton active={todayGenre === 'poem'} done={poemDone} onClick={() => setTodayGenre('poem')} icon={<IconFeather size={26} strokeWidth={1.7} />} label="Poem" />
-          <GenreButton active={todayGenre === 'story'} done={storyDone} onClick={() => setTodayGenre('story')} icon={<IconBook size={26} strokeWidth={1.7} />} label="Story" />
+        <div style={{ display: 'flex', gap: 10 }}>
+          <GenreButton active={todayGenre === 'poem'} done={poemDone} onClick={() => setTodayGenre('poem')} icon={<IconFeather size={24} strokeWidth={1.7} />} label="Poem" />
+          <GenreButton active={todayGenre === 'story'} done={storyDone} onClick={() => setTodayGenre('story')} icon={<IconBook size={24} strokeWidth={1.7} />} label="Story" />
+          <GenreButton active={todayGenre === 'sher'} done={sherDone} onClick={() => setTodayGenre('sher')} icon={<IconMoon size={24} strokeWidth={1.7} />} label="Sher" />
         </div>
       </div>
 
@@ -97,12 +99,12 @@ export default function Today() {
 
 function GenreButton({ active, done, onClick, icon, label }) {
   return (
-    <button className="press" onClick={onClick} style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, padding: '18px 18px', borderRadius: 20, background: active ? 'var(--accent)' : 'oklch(0.96 0.02 65)', color: active ? '#fff' : 'oklch(0.42 0.05 45)', boxShadow: active ? 'var(--shadow-button)' : 'none' }}>
+    <button className="press" onClick={onClick} style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '16px 8px', borderRadius: 20, background: active ? 'var(--accent)' : 'oklch(0.96 0.02 65)', color: active ? '#fff' : 'oklch(0.42 0.05 45)', boxShadow: active ? 'var(--shadow-button)' : 'none' }}>
       {icon}
-      <div style={{ fontSize: 15, fontWeight: 700 }}>{label}</div>
+      <div style={{ fontSize: 14, fontWeight: 700 }}>{label}</div>
       {done && (
-        <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: '50%', background: active ? 'rgba(255,255,255,0.28)' : 'var(--accent)', color: '#fff', flex: 'none' }}>
-          <IconCheck size={12} strokeWidth={2.6} />
+        <span style={{ position: 'absolute', top: 8, right: 8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 18, height: 18, borderRadius: '50%', background: active ? 'rgba(255,255,255,0.28)' : 'var(--accent)', color: '#fff', flex: 'none' }}>
+          <IconCheck size={11} strokeWidth={2.6} />
         </span>
       )}
     </button>
@@ -141,7 +143,7 @@ function PracticeCard({ genre, onPractice, onSkip }) {
         Keep the pen warm
       </div>
       <p style={{ fontFamily: 'var(--font-serif)', fontSize: 16, lineHeight: 1.55, color: 'oklch(0.4 0.03 55)', marginTop: 10 }}>
-        You've done the work that counts. Write one more {genre === 'poem' ? 'poem' : 'story'} from a fresh prompt — no scoring, just for the love of it.
+        You've done the work that counts. Write one more {genre === 'poem' ? 'poem' : genre === 'sher' ? 'sher' : 'story'} from a fresh prompt — no scoring, just for the love of it.
       </p>
       <button className="press" onClick={onPractice} style={{ width: '100%', marginTop: 18, background: 'var(--accent)', color: '#fff', textAlign: 'center', padding: 15, borderRadius: 16, fontWeight: 700, fontSize: 15, boxShadow: 'var(--shadow-button)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
         Write from a prompt <IconArrowRight size={18} />

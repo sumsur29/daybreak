@@ -20,7 +20,7 @@ export default function PortfolioItem() {
     )
   }
 
-  const isPoem = piece.genre === 'poem'
+  const isPoem = piece.genre === 'poem' || piece.genre === 'sher'
 
   return (
     <Screen>

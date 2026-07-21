@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Screen from '../components/Screen'
 import { useStore } from '../state/store'
-import { IconGear, IconFeather, IconBook, IconCheck, IconBack } from '../icons/Icons'
+import { IconGear, IconFeather, IconBook, IconMoon, IconCheck, IconBack } from '../icons/Icons'
 
-const filters = ['All', 'Poems', 'Stories']
+const filters = ['All', 'Poems', 'Stories', 'Ghazals']
 
 export default function You() {
   const navigate = useNavigate()
@@ -16,6 +16,7 @@ export default function You() {
   const list = portfolio.filter((p) => {
     if (filter === 'All') return true
     if (filter === 'Poems') return p.genre === 'poem'
+    if (filter === 'Ghazals') return p.genre === 'sher'
     return p.genre === 'story'
   })
 
@@ -236,7 +237,8 @@ export default function You() {
       <div style={{ padding: '14px 20px 0', display: 'flex', flexDirection: 'column', gap: 12 }}>
         {list.map((piece) => {
           const isPoem = piece.genre === 'poem'
-          const Icon = isPoem ? IconFeather : IconBook
+          const isSher = piece.genre === 'sher'
+          const Icon = isSher ? IconMoon : isPoem ? IconFeather : IconBook
           return (
             <button
               key={piece.id}
@@ -249,8 +251,8 @@ export default function You() {
                   width: 42,
                   height: 42,
                   borderRadius: 12,
-                  background: isPoem ? 'var(--accent-tint)' : 'oklch(0.95 0.02 65)',
-                  color: isPoem ? 'var(--accent)' : 'oklch(0.5 0.03 55)',
+                  background: (isPoem || isSher) ? 'var(--accent-tint)' : 'oklch(0.95 0.02 65)',
+                  color: (isPoem || isSher) ? 'var(--accent)' : 'oklch(0.5 0.03 55)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -262,8 +264,8 @@ export default function You() {
               <div style={{ flex: 1 }}>
                 <div style={{ fontFamily: 'var(--font-serif)', fontSize: 17, color: 'oklch(0.28 0.03 55)' }}>{piece.title}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
-                  <span style={{ fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', color: isPoem ? 'var(--accent)' : 'oklch(0.5 0.03 55)' }}>
-                    {isPoem ? 'Poem' : 'Story'}
+                  <span style={{ fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', color: (isPoem || isSher) ? 'var(--accent)' : 'oklch(0.5 0.03 55)' }}>
+                    {isSher ? 'Ghazal' : isPoem ? 'Poem' : 'Story'}
                   </span>
                   <span style={{ fontSize: 11, fontWeight: 600, color: 'oklch(0.62 0.02 55)' }}>
                     {piece.status === 'finished' ? 'Finished' : 'Draft'} · {piece.date}

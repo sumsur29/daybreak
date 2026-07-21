@@ -71,7 +71,7 @@ function normalizeSessionProgress(s) {
     ...s,
     sessionProgress: {
       step: sp.step || 0,
-      byGenre: { poem: { done: false, practiceDone: false, recap: null }, story: { done: false, practiceDone: false, recap: null } },
+      byGenre: { poem: { done: false, practiceDone: false, recap: null }, story: { done: false, practiceDone: false, recap: null }, sher: { done: false, practiceDone: false, recap: null } },
     },
   }
 }
@@ -96,7 +96,7 @@ function rolloverIfNewDay(s) {
   if (s.sessionDay === today) return s // still the same Daybreak day
 
   // fresh session for the new day
-  const sessionProgress = { step: 0, byGenre: { poem: { done: false, practiceDone: false, recap: null }, story: { done: false, practiceDone: false, recap: null } } }
+  const sessionProgress = { step: 0, byGenre: { poem: { done: false, practiceDone: false, recap: null }, story: { done: false, practiceDone: false, recap: null }, sher: { done: false, practiceDone: false, recap: null } } }
 
   // streak: if the last active day wasn't yesterday, the run is broken
   let streak = s.streak

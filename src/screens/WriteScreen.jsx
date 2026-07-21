@@ -100,7 +100,7 @@ export default function WriteScreen() {
   const deriveTitle = () => {
     const firstLine = text.split('\n').find((l) => l.trim().length > 0)
     if (firstLine) return firstLine.trim().slice(0, 60)
-    return genre === 'poem' ? 'Untitled poem' : 'Untitled story'
+    return genre === 'poem' ? 'Untitled poem' : genre === 'sher' ? 'Untitled sher' : 'Untitled story'
   }
 
   const handleFinish = () => {
@@ -262,6 +262,8 @@ export default function WriteScreen() {
           <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.5 }}>
             {genre === 'poem'
               ? 'Try ending a line on a word you want the reader to sit with, even mid-thought.'
+              : genre === 'sher'
+              ? 'Keep both lines the same length, and land the second one on your radif — the repeated refrain word.'
               : 'Cut your first sentence and see if the second one is actually where the story starts.'}
           </div>
         )}
@@ -313,5 +315,5 @@ export default function WriteScreen() {
 function findPromptGenre(state, promptId) {
   const p = state.practice.prompts.find((pr) => pr.id === promptId)
   if (!p) return 'poem'
-  return p.kind === 'story' ? 'story' : 'poem'
+  return p.kind === 'story' ? 'story' : p.kind === 'sher' ? 'sher' : 'poem'
 }
