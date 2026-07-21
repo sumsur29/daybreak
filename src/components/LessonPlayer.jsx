@@ -129,7 +129,10 @@ export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alr
     scrollRef.current?.scrollTo({ top: 0, behavior: 'auto' })
   }, [index])
 
-  const genreForCourse = /poetry|poem/i.test(courseTitle) ? 'poem' : 'story'
+  // Ghazal is poetry — file its pieces under Poems. The form-checker still
+  // fires via the 'gh-' lessonId in writingFeedback. Pass 2 splits out a
+  // dedicated 'sher' genre with its own Today track + portfolio filter.
+  const genreForCourse = /poetry|poem|ghazal|sher/i.test(courseTitle) ? 'poem' : 'story'
 
   const submitAttempt = () => {
     if (!attempt.trim()) return

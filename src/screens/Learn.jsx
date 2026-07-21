@@ -14,8 +14,10 @@ const ART = {
   'poetry-foundations': { img: `${import.meta.env.BASE_URL}art/starry-night.jpg`, credit: 'Vincent van Gogh · The Starry Night · 1889' },
   'short-story-craft': { img: `${import.meta.env.BASE_URL}art/great-wave.jpg`, credit: 'Katsushika Hokusai · The Great Wave off Kanagawa · 1831' },
   'imagery-metaphor': { img: `${import.meta.env.BASE_URL}art/irises.jpg`, credit: 'Vincent van Gogh · Irises · 1889' },
+  // TODO(vendor): download into public/art/nayika.jpg and switch to `${import.meta.env.BASE_URL}art/nayika.jpg` like the others.
+  'ghazal-sher': { img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Brooklyn%20Museum%20-%20A%20Nayika%20Awaits%20Her%20Lover.jpg', credit: 'Indian miniature · A Nayika Awaits Her Lover · Brooklyn Museum' },
 }
-const SHORT = { 'poetry-foundations': 'Poetry', 'short-story-craft': 'Short Story', 'imagery-metaphor': 'Imagery', 'character-voice': 'Character' }
+const SHORT = { 'poetry-foundations': 'Poetry', 'short-story-craft': 'Short Story', 'imagery-metaphor': 'Imagery', 'ghazal-sher': 'Ghazal', 'character-voice': 'Character' }
 
 export default function Learn() {
   const navigate = useNavigate()

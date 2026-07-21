@@ -191,7 +191,198 @@ function candidates(a, genre) {
 }
 
 // Builds up to 4 varied, specific notes, leading with the lesson's focus.
+// ————————————————————————————————————————————————————————————
+// GHAZAL FORM-CHECKER
+// Structural feedback for the Ghazal & Sher track. No AI — this reads the
+// couplets and checks them against the actual rules of the form: radif
+// (refrain), qafia (rhyme before it), matla (opening sher), sher count, and
+// a rough beher (meter) consistency check on the roman transliteration.
+// ————————————————————————————————————————————————————————————
+
+const GH_VOWELS = 'aeiou'
+
+function ghWords(line) {
+  return line.toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(Boolean)
+}
+
+// Longest shared run of trailing words between two lines → the radif candidate.
+function trailingCommon(a, b) {
+  let i = a.length - 1, j = b.length - 1
+  const common = []
+  while (i >= 0 && j >= 0 && a[i] === b[j]) { common.unshift(a[i]); i--; j-- }
+  return { common, aIdx: i, bIdx: j } // aIdx/bIdx point at the word BEFORE the radif (the qafia)
+}
+
+// Rhyme key: from the last vowel group of a word to its end. bekaar→aar, deewaar→aar.
+function ghRhymeKey(word) {
+  if (!word) return ''
+  const w = word.toLowerCase()
+  let last = -1
+  for (let k = 0; k < w.length; k++) if (GH_VOWELS.includes(w[k])) last = k
+  if (last === -1) return w.slice(-2)
+  // walk back over a contiguous vowel cluster so "aa"/"ee" count as one nucleus
+  let start = last
+  while (start > 0 && GH_VOWELS.includes(w[start - 1])) start--
+  return w.slice(start)
+}
+
+// Rough syllable count ≈ number of vowel groups.
+function ghSyllables(line) {
+  const w = line.toLowerCase().replace(/[^a-z]/g, '')
+  let n = 0, inV = false
+  for (const ch of w) {
+    const v = GH_VOWELS.includes(ch)
+    if (v && !inV) n++
+    inV = v
+  }
+  return n
+}
+
+export function analyzeGhazal(text) {
+  const lines = String(text || '').split(/\n+/).map(l => l.trim()).filter(Boolean)
+  const shers = []
+  for (let k = 0; k < lines.length; k += 2) {
+    shers.push({ a: lines[k], b: lines[k + 1] || null })
+  }
+  const complete = shers.filter(sh => sh.b)
+  const danglingLine = lines.length % 2 === 1
+
+  // Radif + matla from the opening sher (needs both lines).
+  let radif = [], matlaRadifOk = false, matlaRhymeOk = false, qafiaKey = ''
+  if (complete.length) {
+    const a = ghWords(complete[0].a), b = ghWords(complete[0].b)
+    const tc = trailingCommon(a, b)
+    radif = tc.common
+    matlaRadifOk = radif.length > 0
+    const qa = a[tc.aIdx], qb = b[tc.bIdx]
+    if (matlaRadifOk && qa && qb) {
+      matlaRhymeOk = ghRhymeKey(qa) === ghRhymeKey(qb)
+      qafiaKey = ghRhymeKey(qa)
+    }
+  }
+
+  // Check radif + qafia across every complete sher's SECOND line.
+  const radifStr = radif.join(' ')
+  let radifHits = 0
+  const qafiaKeys = []
+  const radifBreaks = []
+  complete.forEach((sh, idx) => {
+    const bw = ghWords(sh.b)
+    const tail = bw.slice(bw.length - radif.length).join(' ')
+    const carriesRadif = radif.length > 0 && tail === radifStr
+    if (carriesRadif) {
+      radifHits++
+      const q = bw[bw.length - radif.length - 1]
+      if (q) qafiaKeys.push({ idx, key: ghRhymeKey(q), word: q })
+    } else if (radif.length > 0) {
+      radifBreaks.push(idx)
+    }
+  })
+  // Also count matla's first line as carrying radif+qafia (it should).
+  if (matlaRadifOk) {
+    const aw = ghWords(complete[0].a)
+    const q = aw[aw.length - radif.length - 1]
+    if (q) qafiaKeys.unshift({ idx: 0, key: ghRhymeKey(q), word: q, matlaFirst: true })
+  }
+
+  // Qafia family: the dominant rhyme key; flag outliers.
+  const keyCounts = {}
+  qafiaKeys.forEach(q => { keyCounts[q.key] = (keyCounts[q.key] || 0) + 1 })
+  let famKey = ''
+  let famMax = 0
+  for (const k in keyCounts) if (keyCounts[k] > famMax) { famMax = keyCounts[k]; famKey = k }
+  const qafiaOutliers = qafiaKeys.filter(q => famKey && q.key !== famKey)
+
+  // Beher: rough syllable counts per line + spread.
+  const syll = lines.map(ghSyllables)
+  const sorted = [...syll].sort((x, y) => x - y)
+  const median = sorted.length ? sorted[Math.floor(sorted.length / 2)] : 0
+  const beherOutliers = syll
+    .map((n, i) => ({ i, n, off: Math.abs(n - median) }))
+    .filter(o => median > 0 && o.off >= 3)
+
+  return {
+    lineCount: lines.length,
+    sherCount: complete.length,
+    danglingLine,
+    radif, radifStr, radifHits, radifBreaks,
+    matlaRadifOk, matlaRhymeOk,
+    famKey, qafiaOutliers,
+    syll, median, beherOutliers,
+  }
+}
+
+export function ghazalFeedback(text) {
+  const words = String(text || '').trim().split(/\s+/).filter(Boolean).length
+  const g = analyzeGhazal(text)
+  const notes = []
+
+  if (g.lineCount === 0) {
+    return { words: 0, lines: 0, notes: ['Write a sher — two lines — and I\u2019ll check it against the form: radif, qafia, matla, and meter.'] }
+  }
+
+  // Single sher / two lines → treat as one couplet or a matla.
+  if (g.sherCount <= 1 && !g.danglingLine) {
+    if (g.matlaRadifOk) {
+      notes.push(`Both lines land on the same refrain \u2014 "${g.radifStr}". That\u2019s a matla: the ghazal\u2019s opening sher carries the radif in both lines. ${g.matlaRhymeOk ? 'And the rhyme before it (qafia) matches \u2014 clean.' : 'Now make the word just before "' + g.radifStr + '" rhyme in both lines \u2014 that\u2019s the qafia.'}`)
+    } else {
+      notes.push('A sher is two lines that turn. To make this an opening sher (matla), end both lines on the same refrain word \u2014 that repeated word is your radif.')
+    }
+    if (g.beherOutliers.length) {
+      notes.push(`Roughly, your two lines run ${g.syll.join(' and ')} syllables. A ghazal wants them even \u2014 try trimming the longer one so both carry the same weight.`)
+    } else if (g.syll.length === 2) {
+      notes.push(`Both lines run about ${g.syll[0]} syllables \u2014 evenly weighted, which is what the meter (beher) wants.`)
+    }
+    return { words, lines: g.lineCount, notes: notes.slice(0, 4) }
+  }
+
+  // Full ghazal analysis.
+  if (g.danglingLine) {
+    notes.push(`You have ${g.sherCount} complete sher${g.sherCount === 1 ? '' : 's'} and one unpaired line \u2014 every sher needs two lines, so give that last one a partner.`)
+  } else {
+    notes.push(`${g.sherCount} shers on the page.${g.sherCount >= 5 ? ' That\u2019s a full ghazal\u2019s length.' : ' A ghazal usually runs 5 or more \u2014 keep going if you can.'}`)
+  }
+
+  // Matla
+  if (g.matlaRadifOk) {
+    notes.push(`Your matla lands the radif "${g.radifStr}" in both opening lines${g.matlaRhymeOk ? ', and the qafia rhymes across them \u2014 the music is set.' : '. Now check the qafia \u2014 the word just before "' + g.radifStr + '" should rhyme in both lines.'}`)
+  } else {
+    notes.push('The opening sher (matla) should end BOTH its lines on the same refrain word. Right now they don\u2019t match \u2014 that\u2019s what sets the music for the whole ghazal.')
+  }
+
+  // Radif consistency
+  if (g.radif.length) {
+    if (g.radifBreaks.length === 0) {
+      notes.push(`Radif holds: "${g.radifStr}" returns at the end of every sher. That repetition is the ghazal\u2019s heartbeat.`)
+    } else {
+      const which = g.radifBreaks.map(i => `#${i + 1}`).join(', ')
+      notes.push(`Your radif is "${g.radifStr}", but sher ${which} doesn\u2019t end on it \u2014 the refrain has to close every second line, unchanged.`)
+    }
+  }
+
+  // Qafia family
+  if (g.famKey) {
+    if (g.qafiaOutliers.length === 0) {
+      notes.push(`The qafia rhymes all sit in one family (\u2011${g.famKey}) \u2014 each sher rhymes just before the refrain, which is exactly the move.`)
+    } else {
+      const w = g.qafiaOutliers.map(o => `"${o.word}"`).join(', ')
+      notes.push(`Most of your rhymes land on \u2011${g.famKey}, but ${w} breaks the family. The qafia should keep the same rhyme sound before the radif each time.`)
+    }
+  }
+
+  // Beher (rough)
+  if (g.beherOutliers.length) {
+    const which = g.beherOutliers.map(o => `line ${o.i + 1}`).join(', ')
+    notes.push(`Roughly scanning syllables, ${which} run${g.beherOutliers.length===1?'s':''} off the length of the rest \u2014 a ghazal holds one meter (beher) across every line. Read it aloud and even it out.`)
+  }
+
+  return { words, lines: g.lineCount, notes: notes.slice(0, 5) }
+}
+
 export function writingFeedback({ text, genre, lessonId }) {
+  if ((lessonId && /^gh-/.test(lessonId)) || genre === 'sher') {
+    return ghazalFeedback(text)
+  }
   const a = analyzeWriting(text)
   if (a.words < 3) {
     return { words: a.words, lines: a.lines, notes: ['Just a few words so far — give the prompt a little more and I can say something useful about the writing itself.'] }

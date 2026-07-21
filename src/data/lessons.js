@@ -14,7 +14,6 @@
 // `lines` entries may be strings, '' (blank line / stanza break), or
 // { text, mark } where mark highlights a word/phrase in accent.
 
-
 export const lessonContent = {
   "pf-1": {
     title: "What makes a line a line",
@@ -2027,12 +2026,182 @@ export const lessonContent = {
       },
     ],
   },
+  'gh-1': {
+    title: 'The sher — a couplet that turns',
+    blocks: [
+      { type: 'intro', takeaway: 'A sher is two lines that set something up and then turn it — a complete world in a single couplet.', minutes: 6, sections: ['The couplet', 'Setup & turn', 'See it', 'Self-contained', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'The smallest whole poem', body: [
+        'In Urdu poetry the basic unit is not the poem but the sher — a single couplet of two lines, each line called a misra. A sher is complete on its own. You can carry one in your pocket, say it at the right moment, and it lands.',
+        'This is the first thing to unlearn from English verse: a sher does not build across many lines toward a payoff. The whole arc — tension and release — happens in just two.' ] },
+      { type: 'concept', heading: 'Setup, then turn', body: [
+        'The first misra sets a scene or a claim. The second misra turns it — deepens it, contradicts it, or twists the knife. The pleasure of a sher is that turn between the two lines.',
+        'Think of the first line as the wind-up and the second as the throw. Everything the first line gathers, the second releases.' ] },
+      { type: 'callout', label: 'The core idea', text: 'One sher = one complete thought that turns on itself. Two lines: gather, then release.' },
+      { type: 'example', heading: 'A sher turning', variant: 'poem', lines: ['tere jaane ke baad bhi ghar wahi hai', 'bas har ek cheez ab kuchh kam si lagti hai'], caption: 'The first line makes a flat claim — nothing has changed, the house is the same. The second turns it: and yet everything feels slightly less. The turn is the whole poem.' },
+      { type: 'concept', heading: 'Each sher stands alone', body: [
+        'A ghazal is many shers strung together, but here is the surprise for a Western reader: the shers usually do not tell one continuous story. Each is its own island. One may be about love, the next about God, the next about grief.',
+        'So learn to write the single sher first. Master the couplet that turns, and you already have the atom of everything that follows.' ] },
+      { type: 'recap', heading: 'What to carry with you', points: ['A sher is one couplet — two misras — and it is a complete poem.', 'The first line sets up; the second line turns.', 'Shers stand alone; a ghazal is a string of them, not one story.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Write one sher: a first line that makes a simple claim, and a second line that quietly turns it — deepens, reverses, or complicates it.' },
+    ],
+  },
+  'gh-2': {
+    title: 'The ghazal — couplets under one music',
+    blocks: [
+      { type: 'intro', takeaway: 'A ghazal is a chain of independent shers held together not by story but by a shared music — a returning sound.', minutes: 6, sections: ['What holds it', 'Not a story', 'The shape', 'See it', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'Held by sound, not plot', body: [
+        'If each sher is its own island, what makes a ghazal one poem and not a pile of couplets? A shared music. Every sher ends on the same returning sound, so the ear feels them as one thing even when the meanings jump.',
+        'That returning sound has two parts you will learn next: the radif (a repeated word) and the qafia (a rhyme just before it). For now, just hear that a ghazal keeps coming back to the same chord.' ] },
+      { type: 'callout', label: 'The core idea', text: 'A ghazal is unity of sound over variety of meaning. The couplets wander; the music always comes home.' },
+      { type: 'concept', heading: 'The shape on the page', body: [
+        'A ghazal is usually five to fifteen shers. The opening sher is special — it is the matla, and it states the music in both its lines. After that, only the second line of each sher carries the refrain.',
+        'The final sher is often the maqta, where the poet slips in their pen-name. You will meet all of these; the point now is the overall shape: a matla to open, free-standing shers in the middle, a maqta to close.' ] },
+      { type: 'example', heading: 'Two shers, one music', variant: 'poem', lines: ['tere bina ye shaam bhi bekaar hai', 'har raasta ab dil ka deewaar hai', 'raaton ko jaag kar tujhe likhta hoon main', 'har lafz mera tera talabgaar hai'], caption: 'Two different thoughts — an empty evening, a sleepless night of writing — but both come home to the same sound: an -aar rhyme and the word "hai". That returning sound is the ghazal.' },
+      { type: 'recap', heading: 'What to carry with you', points: ['A ghazal unifies independent shers through a shared, returning sound.', 'It opens with a matla and often closes with a maqta.', 'Meaning can wander from sher to sher; the music never does.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Take the sher you wrote last lesson. Write a second, completely different sher — different subject entirely — that ends on the same last word. Feel how the shared word starts to bind them.' },
+    ],
+  },
+  'gh-3': {
+    title: 'Radif — the refrain',
+    blocks: [
+      { type: 'intro', takeaway: 'The radif is the exact word or phrase that returns at the end of every sher — the ghazal\'s heartbeat.', minutes: 6, sections: ['The returning word', 'Where it sits', 'See it', 'Choosing one', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'The word that returns', body: [
+        'The radif is the simplest device in the ghazal and the one that gives it its hypnotic pull: it is a word (or short phrase) that repeats, unchanged, at the very end of every sher.',
+        'In the matla it ends both lines. In every sher after, it ends the second line. Because it never changes, the ear starts to expect it — and a good poet plays with that expectation.' ] },
+      { type: 'callout', label: 'The core idea', text: 'The radif is fixed and repeated. Same word, same spot, every time — the refrain you can feel coming.' },
+      { type: 'example', heading: 'Radif in bold position', variant: 'poem', lines: ['tere bina ye shaam bhi bekaar hai', 'har raasta ab dil ka deewaar hai'], caption: 'The radif here is "hai". It closes both lines of this matla. From here on, every sher of the ghazal must land on "hai" too.' },
+      { type: 'concept', heading: 'Choosing a good radif', body: [
+        'A strong radif is common enough to reuse across many shers without strain, but flexible enough to shift meaning each time. Little words — hai, tha, milega, nahin, ke baad — make wonderful radifs.',
+        'A radif that is too specific traps you: if you pick a rare word, you will run out of shers that can honestly end on it. Pick something the language wants to say often.' ] },
+      { type: 'recap', heading: 'What to carry with you', points: ['The radif is a fixed word/phrase repeated at each sher\'s end.', 'It closes both lines of the matla, then the 2nd line of every sher.', 'Choose a radif that is common and flexible, not rare and rigid.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Pick a simple radif — try "hai", "nahin", or "ke baad". Write two shers that both end on it, keeping it in exactly the same final position each time.' },
+    ],
+  },
+  'gh-4': {
+    title: 'Qafia — the rhyme before it',
+    blocks: [
+      { type: 'intro', takeaway: 'The qafia is the rhyming word that sits just before the radif — it changes every sher but always rhymes.', minutes: 6, sections: ['The rhyme slot', 'How it pairs with radif', 'See it', 'The rhyme family', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'The changing rhyme', body: [
+        'If the radif is the fixed word, the qafia is the moving one right in front of it. The qafia changes in every sher — but every qafia rhymes with the others. It is the ghazal\'s rhyme scheme, hiding just before the refrain.',
+        'So the end of each sher has two jobs stacked together: a fresh rhyming word (qafia), then the unchanging refrain (radif).' ] },
+      { type: 'callout', label: 'The core idea', text: 'Radif repeats; qafia rhymes. Together they make the returning chord: [new rhyme] + [same refrain].' },
+      { type: 'example', heading: 'Qafia + radif, stacked', variant: 'poem', lines: ['tere bina ye shaam bhi bekaar hai', 'har raasta ab dil ka deewaar hai', 'ke zindagi se ishq ka izhaar hai', 'har lafz mera tera talabgaar hai'], caption: 'Radif = "hai" throughout. The qafias are bekaar, deewaar, izhaar, talabgaar — all rhyming on -aar, each new, each landing just before "hai".' },
+      { type: 'concept', heading: 'The rhyme family', body: [
+        'The qafias must all belong to one rhyme family — here, words ending in -aar. Before you write the whole ghazal, it pays to brainstorm your rhyme family first: list every word you can that rhymes, and you will see how many shers the ground can hold.',
+        'A rich rhyme family (many honest options) means a long, easy ghazal. A thin one means you will strain. Choosing the qafia family is choosing how much room you have to move.' ] },
+      { type: 'recap', heading: 'What to carry with you', points: ['The qafia is the rhyming word directly before the radif.', 'It changes each sher but stays within one rhyme family.', 'Brainstorm the rhyme family first — it decides how long the ghazal can run.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Choose a radif and a rhyme family (e.g. radif "hai", rhymes on -aar). List six words in that family. Then write one sher using two of them across its lines.' },
+    ],
+  },
+  'gh-5': {
+    title: 'The matla — your opening sher',
+    blocks: [
+      { type: 'intro', takeaway: 'The matla is the opening sher where BOTH lines carry the radif and qafia — it declares the music for the whole ghazal.', minutes: 5, sections: ['The opener', 'Why both lines', 'See it', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'The sher that sets the rules', body: [
+        'The matla is the first sher of a ghazal, and it is the only one where both lines end on the qafia + radif. Every later sher rhymes only in its second line — but the matla rhymes in both.',
+        'Why? Because the matla is a promise. By landing the pattern twice, back to back, it teaches the reader\'s ear exactly what sound to expect for the rest of the poem.' ] },
+      { type: 'callout', label: 'The core idea', text: 'The matla states the music twice so the ear can\'t miss it. Both lines: qafia + radif. It is the ghazal\'s tuning fork.' },
+      { type: 'example', heading: 'A matla at work', variant: 'poem', lines: ['tere bina ye shaam bhi bekaar hai', 'har raasta ab dil ka deewaar hai'], caption: 'Both lines end on qafia (-aar) + radif ("hai"): bekaar hai / deewaar hai. The pattern is now set; the rest of the ghazal will echo it in every second line.' },
+      { type: 'recap', heading: 'What to carry with you', points: ['The matla is the opening sher.', 'Uniquely, BOTH its lines carry the qafia + radif.', 'It exists to establish the music for everything that follows.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Write a matla: an opening sher whose two lines both end on your chosen qafia + radif. Make sure the two rhyme words are different but from the same family.' },
+    ],
+  },
+  'gh-6': {
+    title: 'Beher — short and long syllables',
+    blocks: [
+      { type: 'intro', takeaway: 'Beher is the meter of a ghazal — a fixed pattern of short and long syllables that every line must keep.', minutes: 7, sections: ['Weight', 'Short vs long', 'Hear it', 'One pattern, every line', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'Every syllable has weight', body: [
+        'Rhyme and refrain make the ghazal\'s sound; beher makes its rhythm. Beher is meter — and Urdu meter is built not on stress, as in English, but on the weight of each syllable.',
+        'Each syllable is either short or long. A line of a ghazal follows a fixed sequence of these weights, and — this is the strict part — every single line of the ghazal follows the same sequence.' ] },
+      { type: 'list', heading: 'The two weights', items: [
+        { term: 'Short', text: 'A quick, open sound — a single consonant + short vowel. Think the "ka" in "kabhi", the "ye" in "yeh".' },
+        { term: 'Long', text: 'A held or closed sound — a long vowel, or a syllable ending in a consonant. Think "raat", "chaand", "hai".' } ] },
+      { type: 'callout', label: 'The core idea', text: 'Beher = a fixed pattern of short and long syllables, repeated identically in every line of the ghazal.' },
+      { type: 'concept', heading: 'One pattern, held throughout', body: [
+        'You do not need to memorise the classical meters by name to begin. What you must feel is consistency: if your first line runs short-long-long-short-long, your next line should too. When a line "sounds off" in a ghazal, it is almost always the beher that broke.',
+        'Read your lines aloud and tap the weights. Two lines that carry the same number and pattern of beats sit together; one that runs long or short will trip the ear.' ] },
+      { type: 'recap', heading: 'What to carry with you', points: ['Beher is meter: a fixed pattern of short and long syllables.', 'Urdu meter counts syllable weight, not English-style stress.', 'Every line of a ghazal keeps the same pattern — consistency is the rule.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Take your matla and read both lines aloud slowly, feeling each syllable as short or long. Do the two lines share the same pattern? If one runs longer, try trimming a word to match.' },
+    ],
+  },
+  'gh-7': {
+    title: 'Taqti — scanning a line',
+    blocks: [
+      { type: 'intro', takeaway: 'Taqti is the craft of breaking a line into its short and long syllables to check it against the beher.', minutes: 7, sections: ['What scanning is', 'How to scan', 'See it', 'Fixing a break', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'Reading the weights', body: [
+        'Taqti is simply scanning — going through a line syllable by syllable and marking each one short or long, then reading the pattern back. It is how a shayar proves a line is "in beher" rather than just hoping it is.',
+        'It feels mechanical at first and becomes instinct. Eventually you hear a broken line the way a musician hears a wrong note.' ] },
+      { type: 'list', heading: 'How to scan a misra', items: [
+        { term: 'Break it up', text: 'Split the line into syllables, not words.' },
+        { term: 'Weigh each', text: 'Mark every syllable short or long by its sound.' },
+        { term: 'Read the pattern', text: 'Say the sequence of weights aloud, ignoring meaning — just the beats.' },
+        { term: 'Compare', text: 'Check that pattern against your other lines. They must match.' } ] },
+      { type: 'example', heading: 'A line, scanned', variant: 'poem', lines: ['ye / raat / kuchh / keh / rahi / hai', 'short long long short long long'], caption: 'Split into syllables and weighed: ye (short), raat (long), kuchh (long), keh (short), rahi (long), hai (long). That weight-pattern is what every other line of the ghazal must also carry.' },
+      { type: 'callout', label: 'Fixing a break', text: 'When a line won\'t scan, you have three tools: swap a word for one of different weight, add or drop a syllable, or reorder. Meaning bends to meter in a ghazal — not the other way around.' },
+      { type: 'recap', heading: 'What to carry with you', points: ['Taqti = scanning a line into short/long syllables.', 'Scan by syllable, weigh each, read the pattern, compare lines.', 'To fix an off-meter line: swap, add/drop, or reorder for weight.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Scan one of your misras fully — note which syllables are short and which are long. Then find one word you could swap to change a weight, and see how it shifts the beats.' },
+    ],
+  },
+  'gh-8': {
+    title: 'Building a full ghazal',
+    blocks: [
+      { type: 'intro', takeaway: 'A full ghazal is a matla plus several shers, all sharing one zameen — the same radif, qafia family, and beher.', minutes: 6, sections: ['The zameen', 'From matla outward', 'See it', 'Each sher its own world', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'The zameen — the ground', body: [
+        'Everything you have learned combines into one thing the poets call the zameen — literally the "ground" of the ghazal: its radif, its qafia family, and its beher, taken together. Once you fix the zameen, every sher must stand on it.',
+        'Writing a ghazal is really writing many shers on the same ground. The constraint is the gift: the fixed sound and meter push you toward turns of phrase you would never have found freely.' ] },
+      { type: 'callout', label: 'The core idea', text: 'Zameen = radif + qafia family + beher. Fix the ground first; then every sher is a new step on it.' },
+      { type: 'concept', heading: 'Build outward from the matla', body: [
+        'Start with the matla to set the zameen. Then for each new sher: think of a fresh qafia word from your rhyme family, put it just before the radif in the second line, and build both lines to the beher.',
+        'You do not need them in order. Poets collect shers on a ground over days and arrange them later. Write the ones that come; the ghazal assembles itself.' ] },
+      { type: 'example', heading: 'Three shers on one ground', variant: 'poem', lines: ['tere bina ye shaam bhi bekaar hai', 'har raasta ab dil ka deewaar hai', 'main muskura ke sab se kehta raha', 'ke zindagi se ishq ka izhaar hai', 'raaton ko jaag kar likhta hoon main', 'har lafz mera tera talabgaar hai'], caption: 'One zameen: radif "hai", rhymes on -aar. Three separate thoughts — an empty evening, a brave face, a sleepless night — each a whole sher, all standing on the same ground.' },
+      { type: 'recap', heading: 'What to carry with you', points: ['A ghazal shares one zameen: radif + qafia family + beher.', 'Set the ground with the matla, then build shers outward.', 'Shers need not connect in meaning — only in ground.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Write a short ghazal: a matla plus two more shers, all on one zameen. Keep the radif fixed, draw each qafia from your family, and hold the beher across every line.' },
+    ],
+  },
+  'gh-9': {
+    title: 'The maqta & your takhallus',
+    blocks: [
+      { type: 'intro', takeaway: 'The maqta is the closing sher, where the poet signs the ghazal by weaving in their pen-name — the takhallus.', minutes: 5, sections: ['The signature', 'The takhallus', 'See it', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'Signing the poem', body: [
+        'The maqta is the final sher of a ghazal, and it carries the poet\'s signature — not below the poem, but inside it. The poet names themselves within the couplet, often addressing themselves, as if stepping onto the stage at the end.',
+        'It is a beautiful convention: the poem turns and, for one sher, speaks to or about its maker.' ] },
+      { type: 'concept', heading: 'The takhallus', body: [
+        'The pen-name a poet uses is the takhallus. Ghalib, Mir, Faiz, Firaq — these are takhallus, not surnames. A poet chooses one and threads it into every maqta, so the name becomes part of the music.',
+        'Choose your own takhallus — a short word that sounds good at a line\'s turn. It can be part of your name or something entirely new.' ] },
+      { type: 'callout', label: 'The core idea', text: 'The maqta closes the ghazal by naming the poet inside the sher. The chosen name is the takhallus.' },
+      { type: 'example', heading: 'A maqta with a takhallus', variant: 'poem', lines: ['ay dost tere shehr mein ab kya guzaar hai', 'is dil ka har ek zakhm abhi tak udhaar hai'], caption: 'Imagine the poet\'s takhallus in place of "dost" — addressing themselves by name as the ghazal closes. That self-address, landed on the zameen, is the maqta.' },
+      { type: 'recap', heading: 'What to carry with you', points: ['The maqta is the closing sher of a ghazal.', 'It contains the poet\'s pen-name — the takhallus — woven into the line.', 'The maqta must still sit on the same zameen as every other sher.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Choose a takhallus for yourself. Write a maqta — a closing sher on your ghazal\'s ground — that names yourself inside it, on the radif and qafia.' },
+    ],
+  },
+  'gh-10': {
+    title: 'Gul, bulbul & the masters',
+    blocks: [
+      { type: 'intro', takeaway: 'The ghazal has a shared vocabulary of images — rose, nightingale, cupbearer, moth — that carry centuries of meaning.', minutes: 7, sections: ['A shared world', 'The classic images', 'See it', 'Reading the masters', 'Recap', 'Your turn'] },
+      { type: 'concept', heading: 'A borrowed garden', body: [
+        'Ghazals draw on a shared set of symbols so old they arrive pre-loaded with feeling. When you use them, you are speaking a language every ghazal-reader already knows — and every fresh twist you give them lands against that expectation.',
+        'You do not have to use these images. But knowing them lets you read the tradition and answer it.' ] },
+      { type: 'list', heading: 'The classic cast', items: [
+        { term: 'Gul & bulbul', text: 'The rose and the nightingale — the beloved and the helpless lover who sings to it.' },
+        { term: 'Shama & parwana', text: 'The candle-flame and the moth that burns in it — love that destroys the lover.' },
+        { term: 'Saaqi', text: 'The cupbearer who pours the wine — giver of intoxication, sometimes the divine.' },
+        { term: 'Sehra, qafas, saiyaad', text: 'The desert, the cage, the hunter — longing, captivity, fate.' } ] },
+      { type: 'example', heading: 'An old image, freshly turned', variant: 'poem', lines: ['main parwana tha, jal ke bhi na seekha', 'ke shama se thoda faasla bhi rakhun'], caption: 'The moth-and-flame image is a thousand years old; the turn is the poet\'s own — even after burning, they never learned to keep their distance. Old vocabulary, new sher.' },
+      { type: 'concept', heading: 'Reading the masters', body: [
+        'Now you can read the greats and see the machinery: find the radif and qafia, spot the matla, feel the beher hold across shers, catch the takhallus in the maqta. Ghalib and Mir — both long in the public domain — reward exactly this kind of close reading.',
+        'Read one sher a day. Scan it. Name its parts. It is the fastest way from student to shayar.' ] },
+      { type: 'recap', heading: 'What to carry with you', points: ['The ghazal shares a symbol-vocabulary: gul, bulbul, shama, parwana, saaqi.', 'Using these images speaks to every reader of the tradition at once.', 'Read the masters (Ghalib, Mir) by naming the parts you now know.'] },
+      { type: 'tryit', heading: 'Your turn', prompt: 'Write one sher that uses a classic image — the rose, the moth, the cupbearer — but gives it a turn that is your own. Keep it on a ghazal ground if you can.' },
+    ],
+  },
+
 }
 
 // Returns a lesson's rich blocks if authored, else null (caller falls back to
 // the legacy paragraphs/tryIt renderer for lessons not yet upgraded).
 export function getLessonBlocks(lessonId) {
   return lessonContent[lessonId] || null
+
 }
 
 // ---------------------------------------------------------------------------
