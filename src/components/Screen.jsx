@@ -1,16 +1,17 @@
 import TabBar from './TabBar'
 import ProfileButton from './ProfileButton'
 
-// Flex column filling the (stable-on-first-paint) small viewport height. The
-// nav is a normal flex child at the bottom — laid out, not position:fixed — so
-// it physically can't be mispositioned by iOS viewport-height timing.
+// Scroll container fills the small viewport height (stable on first paint in
+// standalone PWAs). The nav + profile are fixed overlays that float above it.
 export default function Screen({ children, withTabBar = false, background = 'var(--canvas)' }) {
   return (
-    <div style={{ height: '100svh', display: 'flex', flexDirection: 'column', background }}>
+    <>
       <div
         style={{
-          flex: 1,
-          minHeight: 0,
+          position: 'absolute',
+          inset: 0,
+          height: '100svh',
+          background,
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
           paddingTop: withTabBar
@@ -19,9 +20,10 @@ export default function Screen({ children, withTabBar = false, background = 'var
         }}
       >
         {children}
+        {withTabBar && <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 132px)' }} />}
       </div>
       {withTabBar && <TabBar />}
       {withTabBar && <ProfileButton />}
-    </div>
+    </>
   )
 }
