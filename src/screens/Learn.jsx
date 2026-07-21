@@ -8,11 +8,12 @@ import { IconFlame, IconCheck, IconArrowRight, IconLock } from '../icons/Icons'
 // public-domain masterwork that emerges from the ink as you finish its lessons.
 // Complete the course, complete the painting.
 
-const filePath = (name) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(name)}?width=1000`
+// Vendored locally under public/art/ so they load offline and don't depend on
+// Wikimedia. All three are public-domain (Van Gogh d.1890, Hokusai d.1849).
 const ART = {
-  'poetry-foundations': { img: filePath('Vincent van Gogh - Starry Night - Google Art Project.jpg'), credit: 'Vincent van Gogh · The Starry Night · 1889' },
-  'short-story-craft': { img: filePath('The Great Wave off Kanagawa.jpg'), credit: 'Katsushika Hokusai · The Great Wave off Kanagawa · 1831' },
-  'imagery-metaphor': { img: filePath('Irises-Vincent van Gogh.jpg'), credit: 'Vincent van Gogh · Irises · 1889' },
+  'poetry-foundations': { img: `${import.meta.env.BASE_URL}art/starry-night.jpg`, credit: 'Vincent van Gogh · The Starry Night · 1889' },
+  'short-story-craft': { img: `${import.meta.env.BASE_URL}art/great-wave.jpg`, credit: 'Katsushika Hokusai · The Great Wave off Kanagawa · 1831' },
+  'imagery-metaphor': { img: `${import.meta.env.BASE_URL}art/irises.jpg`, credit: 'Vincent van Gogh · Irises · 1889' },
 }
 const SHORT = { 'poetry-foundations': 'Poetry', 'short-story-craft': 'Short Story', 'imagery-metaphor': 'Imagery', 'character-voice': 'Character' }
 
