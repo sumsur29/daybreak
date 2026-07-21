@@ -207,10 +207,7 @@ function WordDetail({ id, mastery, onGrade, onWrite, onRemove, onClose }) {
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--muted)', marginLeft: 4 }}>tap to change</span>
         </button>
 
-        <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-          <button className="press" onClick={() => onWrite(entry)} style={{ flex: 1, background: 'var(--accent)', color: '#fff', padding: 13, borderRadius: 14, fontWeight: 700, fontSize: 13.5, boxShadow: 'var(--shadow-button)' }}>Write with it</button>
-          <button className="press" onClick={onRemove} style={{ flex: 'none', background: 'transparent', color: 'var(--muted)', padding: '13px 16px', borderRadius: 14, fontWeight: 700, fontSize: 13.5 }}>Remove</button>
-        </div>
+        <button className="press" onClick={() => onWrite(entry)} style={{ marginTop: 10, width: '100%', background: 'var(--accent)', color: '#fff', padding: 13, borderRadius: 14, fontWeight: 700, fontSize: 13.5, boxShadow: 'var(--shadow-button)' }}>Write with it</button>
       </div>
     </div>
   )
