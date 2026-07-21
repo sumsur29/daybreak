@@ -54,8 +54,10 @@ function markTodayActive(s) {
   if (s.lastActiveDate === today) {
     return { streak: s.streak, lastActiveDate: today } // already counted today
   }
+  const jsDay = new Date(new Date().getTime() + (4 * 60 - 6 * 60) * 60 * 1000).getUTCDay()
+  const todayIdx = jsDay === 0 ? 6 : jsDay - 1
   const week = s.streak.week
-    ? s.streak.week.map((d) => (d.status === 'today' ? { ...d, status: 'done' } : d))
+    ? s.streak.week.map((d, i) => (i === todayIdx || d.status === 'today' ? { ...d, status: 'done' } : d))
     : s.streak.week
   const current = s.streak.current + 1
   const streak = { ...s.streak, current, best: Math.max(s.streak.best, current), week }
@@ -96,7 +98,10 @@ function rolloverIfNewDay(s) {
     }
   }
 
-  return { ...s, sessionDay: today, sessionProgress, streak }
+  const jsDay2 = new Date(new Date().getTime() + (4 * 60 - 6 * 60) * 60 * 1000).getUTCDay()
+  const tIdx = jsDay2 === 0 ? 6 : jsDay2 - 1
+  const week2 = s.streak.week ? s.streak.week.map((d, i) => (i === tIdx && d.status !== 'done' ? { ...d, status: 'today' } : d)) : s.streak.week
+  return { ...s, sessionDay: today, sessionProgress, streak: { ...streak, week: week2 } }
 }
 
 export function StoreProvider({ children }) {

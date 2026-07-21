@@ -45,9 +45,7 @@ export default function App() {
     <StoreProvider>
       <div
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
+          position: 'relative',
           width: '100%',
           // 100dvh (dynamic viewport height) tracks Safari's collapsing/expanding
           // toolbar in real time; fixed+inset:0 alone leaves a gap when the

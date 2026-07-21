@@ -155,7 +155,7 @@ export default function Today() {
         </div>
         <button
           className="press"
-          onClick={() => navigate(sessionDone ? '/session/write' : '/session/lesson')}
+          onClick={() => navigate(sessionDone ? '/practice' : '/session/lesson')}
           style={{
             width: '100%',
             marginTop: 20,
@@ -173,7 +173,7 @@ export default function Today() {
             gap: 8,
           }}
         >
-          {sessionDone ? 'Write another' : 'Begin session'} <IconArrowRight size={18} />
+          {sessionDone ? 'Go to practice' : 'Begin session'} <IconArrowRight size={18} />
         </button>
       </div>
 
