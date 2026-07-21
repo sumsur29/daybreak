@@ -22,7 +22,7 @@ export default function Screen({ children, withTabBar = false, background = 'var
         }}
       >
         {children}
-        {withTabBar && <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 92px)' }} />}
+        {withTabBar && <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 132px)' }} />}
       </div>
       {withTabBar && <TabBar />}
       {withTabBar && <ProfileButton />}
