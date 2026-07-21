@@ -28,7 +28,7 @@ export default function Today() {
             <div
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 26,
+                fontSize: 23,
                 fontWeight: 700,
                 lineHeight: 1.1,
                 display: 'flex',
@@ -82,7 +82,7 @@ export default function Today() {
       </div>
 
       {/* genre chooser */}
-      <div style={{ padding: '22px 20px 8px' }}>
+      <div style={{ padding: '12px 20px 8px' }}>
         <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 600, color: 'oklch(0.3 0.03 55)', marginBottom: 12 }}>
           Today I want to write…
         </div>
