@@ -38,8 +38,9 @@ export default function LessonView() {
         }
       : null
     startCourseLesson(course.id, lesson.id, recap)
-    navigate(`/learn/${course.id}`)
   }
+
+  const goToCourse = () => navigate(`/learn/${course.id}`)
 
   // Rich, tap-through lesson player
   if (rich) {
@@ -51,6 +52,7 @@ export default function LessonView() {
         lessonId={lesson.id}
         alreadyComplete={!!lesson.done}
         onComplete={handleComplete}
+        onDone={goToCourse}
         onExit={() => navigate(`/learn/${course.id}`)}
       />
     )

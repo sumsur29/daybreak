@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import Screen from '../components/Screen'
 import SessionProgressHeader from '../components/SessionProgressHeader'
 import { useStore, getTodaySession } from '../state/store'
+import LessonComplete from '../components/LessonComplete'
 import { IconClock, IconSparkleWand, IconDraftPage, IconCheck } from '../icons/Icons'
 
 function useTimer(active) {
@@ -55,11 +56,15 @@ export default function WriteScreen() {
   const { state, wordsInText, linesInText, saveDraft, finishWriting, saveDraftPiece } = useStore()
   const resumePiece = resumeId ? state.portfolio.find((p) => p.id === resumeId) : null
 
-  const genre = mode === 'session' ? state.todayGenre : mode === 'practice' ? findPromptGenre(state, promptId) : resumePiece ? resumePiece.genre : 'poem'
-  const draftKey = mode === 'session' ? `session-${state.todayGenre}` : mode === 'practice' ? `practice-${promptId}` : resumeId ? `resume-${resumeId}` : 'freewrite'
+  const genre = mode === 'session' || mode === 'session-extra' ? state.todayGenre : mode === 'practice' ? findPromptGenre(state, promptId) : resumePiece ? resumePiece.genre : 'poem'
+  const draftKey = mode === 'session' ? `session-${state.todayGenre}` : mode === 'session-extra' ? `session-extra-${state.todayGenre}` : mode === 'practice' ? `practice-${promptId}` : resumeId ? `resume-${resumeId}` : 'freewrite'
 
   const promptText = useMemo(() => {
     if (mode === 'session') return getTodaySession(state).write.prompt
+    if (mode === 'session-extra') {
+      const p = state.practice.prompts.find((pr) => pr.kind === state.todayGenre)
+      return p ? p.text : 'Write freely for a few minutes, carrying today\'s idea with you.'
+    }
     if (mode === 'practice') {
       const p = state.practice.prompts.find((pr) => pr.id === promptId)
       return p ? p.text : ''
@@ -72,7 +77,7 @@ export default function WriteScreen() {
   const timer = useTimer(true)
   const [tipVisible, setTipVisible] = useState(false)
   const [savedFlash, setSavedFlash] = useState(false)
-  const [result, setResult] = useState(null) // set once finished — swaps the editor for a feedback view
+  const [celebrating, setCelebrating] = useState(false) // true once finished — swaps in the celebration
 
   useEffect(() => {
     textareaRef.current?.focus()
@@ -87,8 +92,8 @@ export default function WriteScreen() {
   const words = wordsInText(text)
   const lines = linesInText(text)
 
-  const headerTitle = resumePiece ? 'Continue writing' : mode === 'freewrite' ? 'Freewrite' : mode === 'practice' ? 'Practice write' : 'Your turn'
-  const stepLabel = mode === 'session' ? 'Step 3 of 3' : resumePiece ? resumePiece.title : mode === 'freewrite' ? 'Blank page, no rules' : 'Warm-up prompt'
+  const headerTitle = resumePiece ? 'Continue writing' : mode === 'freewrite' ? 'Freewrite' : mode === 'session-extra' ? 'Practice' : mode === 'practice' ? 'Practice write' : 'Your turn'
+  const stepLabel = mode === 'session' ? 'Step 3 of 3' : mode === 'session-extra' ? 'One more, for the love of it' : resumePiece ? resumePiece.title : mode === 'freewrite' ? 'Blank page, no rules' : 'Warm-up prompt'
 
   const deriveTitle = () => {
     const firstLine = text.split('\n').find((l) => l.trim().length > 0)
@@ -99,15 +104,14 @@ export default function WriteScreen() {
   const handleFinish = () => {
     if (!text.trim()) return
     const isDailySession = mode === 'session'
-    finishWriting({ title: deriveTitle(), genre, body: text, isDailySession, replaceId: resumeId || undefined })
-    setResult({
-      isDailySession,
-      notes: generateFeedback({ genre, text, words, lines }),
-    })
+    const isTodayExtra = mode === 'session-extra'
+    // commit first so the celebration reads the real, updated streak/XP
+    finishWriting({ title: deriveTitle(), genre, body: text, isDailySession, isTodayExtra, replaceId: resumeId || undefined })
+    setCelebrating(true)
   }
 
   const handleDone = () => {
-    navigate(mode === 'session' ? '/' : mode === 'practice' ? '/practice' : '/you')
+    navigate(mode === 'session' || mode === 'session-extra' ? '/' : mode === 'practice' ? '/practice' : '/you')
   }
 
   const handleSaveDraft = () => {
@@ -117,92 +121,15 @@ export default function WriteScreen() {
     setTimeout(() => setSavedFlash(false), 1400)
   }
 
-  if (result) {
+  if (celebrating) {
     return (
-      <Screen>
-        <SessionProgressHeader centered eyebrow="Nice work!" stepLabel="Piece saved" onBack={handleDone} />
-        <div style={{ padding: '20px 24px 40px' }}>
-          <div
-            style={{
-              background: 'var(--accent-gradient)',
-              color: '#fff',
-              borderRadius: 22,
-              padding: 22,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-            }}
-          >
-            <div
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: '50%',
-                background: 'rgba(255,255,255,0.22)',
-                border: '2px solid #fff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flex: 'none',
-              }}
-            >
-              <IconCheck size={20} strokeWidth={2.4} />
-            </div>
-            <div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 700 }}>
-                {words} words · {lines} line{lines === 1 ? '' : 's'}
-              </div>
-              <div style={{ fontSize: 13, opacity: 0.92, marginTop: 2 }}>
-                {result.isDailySession
-                  ? `+50 XP · Day ${state.streak.current} streak`
-                  : 'Saved to your portfolio'}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: 20, fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 700, color: 'oklch(0.42 0.03 55)' }}>
-            A few things I noticed
-          </div>
-          <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {result.notes.map((note, i) => (
-              <div
-                key={i}
-                style={{
-                  background: '#fff',
-                  border: '1px solid var(--card-border)',
-                  borderLeft: '3px solid var(--accent)',
-                  borderRadius: 14,
-                  padding: '14px 16px',
-                  fontSize: 14,
-                  lineHeight: 1.6,
-                  color: 'oklch(0.35 0.03 55)',
-                }}
-              >
-                {note}
-              </div>
-            ))}
-          </div>
-
-          <button
-            className="press"
-            onClick={handleDone}
-            style={{
-              width: '100%',
-              marginTop: 24,
-              background: 'var(--accent)',
-              color: '#fff',
-              textAlign: 'center',
-              padding: 16,
-              borderRadius: 16,
-              fontWeight: 700,
-              fontSize: 15,
-              boxShadow: 'var(--shadow-button)',
-            }}
-          >
-            {mode === 'session' ? 'Back to Today' : mode === 'practice' ? 'Back to Practice' : 'Back to portfolio'}
-          </button>
-        </div>
-      </Screen>
+      <LessonComplete
+        line={text}
+        words={words}
+        genre={genre}
+        xpAward={mode === 'session' ? 50 : 0}
+        onContinue={handleDone}
+      />
     )
   }
 

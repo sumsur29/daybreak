@@ -2,14 +2,6 @@ import { useEffect, useState } from 'react'
 import { IconFlame, IconArrowRight } from '../icons/Icons'
 import { useStore } from '../state/store'
 
-// Daybreak day boundary (06:00 Dubai) — mirrors store.todayKey so the streak
-// preview shown here matches what markTodayActive will do on continue.
-function todayKey() {
-  const now = new Date()
-  const d = new Date(now.getTime() + (4 * 60 - 6 * 60) * 60 * 1000)
-  return d.toISOString().slice(0, 10)
-}
-
 const LC_STYLE = `
 @keyframes lcDusk{to{opacity:0}}
 @keyframes lcSun{0%{transform:translate(-50%,140px) scale(.7);opacity:.5}60%{opacity:1}100%{transform:translate(-50%,6px) scale(1);opacity:1}}
@@ -31,13 +23,15 @@ const LC_STYLE = `
 // line the writer just wrote is set in type — the reward is their own words,
 // not a scoreboard. Streak / XP / words sit quietly beneath.
 // Props: line (their attempt text), words (number), genre ('poem'|'story'),
-// alreadyComplete (bool — replays award no XP), onContinue().
-export default function LessonComplete({ line, words, genre, alreadyComplete, onContinue }) {
+// xpAward (number — XP just granted, 0 shows no XP chip), onContinue().
+// The completion is already committed by the caller BEFORE this mounts, so the
+// streak read here is the real, post-completion value — unified across every
+// finish path (course lesson, daily session, extra practice).
+export default function LessonComplete({ line, words, genre, xpAward = 0, onContinue }) {
   const { state } = useStore()
   const [xp, setXp] = useState(0)
 
-  const alreadyToday = state.lastActiveDate === todayKey()
-  const streakNow = alreadyToday ? state.streak.current : state.streak.current + 1
+  const streakNow = state.streak.current
 
   const rawLines = (line || '').split('\n').map((l) => l.trim()).filter(Boolean)
   const shown = rawLines.slice(0, 3)
@@ -47,15 +41,16 @@ export default function LessonComplete({ line, words, genre, alreadyComplete, on
   const genreWord = genre === 'poem' ? 'poem' : 'story'
 
   useEffect(() => {
-    if (alreadyComplete) return
+    if (!xpAward) return
     let n = 0
+    const step = Math.max(24, Math.round(1500 / xpAward))
     const id = setInterval(() => {
       n += 1
       setXp(n)
-      if (n >= 20) clearInterval(id)
-    }, 78)
+      if (n >= xpAward) clearInterval(id)
+    }, step)
     return () => clearInterval(id)
-  }, [alreadyComplete])
+  }, [xpAward])
 
   return (
     <div
@@ -132,7 +127,7 @@ export default function LessonComplete({ line, words, genre, alreadyComplete, on
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: 'var(--accent)', fontWeight: 800, fontSize: 14 }}>
             <IconFlame size={17} /> {streakNow} <span style={{ fontWeight: 700, color: 'var(--muted)', fontSize: 12.5 }}>day streak</span>
           </span>
-          {!alreadyComplete && (
+          {xpAward > 0 && (
             <>
               <Dot />
               <span style={{ fontWeight: 800, fontSize: 14, color: 'oklch(0.42 0.05 48)' }}>+{xp} XP</span>

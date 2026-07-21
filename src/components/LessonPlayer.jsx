@@ -109,7 +109,7 @@ function exerciseFeedback(text, courseTitle, lessonId) {
 
 // Renders a rich lesson as a tap-through sequence of section cards.
 // Props: courseTitle, blocks[], onComplete(), onExit()
-export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alreadyComplete, onComplete, onExit }) {
+export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alreadyComplete, onComplete, onDone, onExit }) {
   const [index, setIndex] = useState(0)
   const scrollRef = useRef(null)
   const { saveDraftPiece } = useStore()
@@ -144,6 +144,7 @@ export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alr
 
   const next = () => {
     if (isLast) {
+      onComplete() // commit completion first, then celebrate over fresh state
       setCelebrating(true)
     } else {
       setIndex((i) => Math.min(total - 1, i + 1))
@@ -168,8 +169,8 @@ export default function LessonPlayer({ courseTitle, title, blocks, lessonId, alr
         line={attempt}
         words={result?.words}
         genre={genreForCourse}
-        alreadyComplete={alreadyComplete}
-        onContinue={onComplete}
+        xpAward={alreadyComplete ? 0 : 20}
+        onContinue={onDone}
       />
     )
   }

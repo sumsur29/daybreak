@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react'
 import { buildInitialState, titleForLevel } from '../data/seed'
-import { buildSessionFromLesson, pickTodayLessonId, SESSION_ORDER } from '../data/lessons'
+import { buildSessionFromLesson, pickTodayLessonId, SESSION_ORDER, getLessonBlocks } from '../data/lessons'
 
 const STORAGE_KEY = 'daybreak_state_v2'
 const StoreContext = createContext(null)
@@ -54,10 +54,8 @@ function markTodayActive(s) {
   if (s.lastActiveDate === today) {
     return { streak: s.streak, lastActiveDate: today } // already counted today
   }
-  const jsDay = new Date(new Date().getTime() + (4 * 60 - 6 * 60) * 60 * 1000).getUTCDay()
-  const todayIdx = jsDay === 0 ? 6 : jsDay - 1
   const week = s.streak.week
-    ? s.streak.week.map((d, i) => (i === todayIdx || d.status === 'today' ? { ...d, status: 'done' } : d))
+    ? s.streak.week.map((d) => (d.status === 'today' ? { ...d, status: 'done' } : d))
     : s.streak.week
   const current = s.streak.current + 1
   const streak = { ...s.streak, current, best: Math.max(s.streak.best, current), week }
@@ -84,7 +82,7 @@ function rolloverIfNewDay(s) {
   if (s.sessionDay === today) return s // still the same Daybreak day
 
   // fresh session for the new day
-  const sessionProgress = { step: 0, completedToday: false }
+  const sessionProgress = { step: 0, completedToday: false, practiceDone: false, recap: null }
 
   // streak: if the last active day wasn't yesterday, the run is broken
   let streak = s.streak
@@ -98,10 +96,7 @@ function rolloverIfNewDay(s) {
     }
   }
 
-  const jsDay2 = new Date(new Date().getTime() + (4 * 60 - 6 * 60) * 60 * 1000).getUTCDay()
-  const tIdx = jsDay2 === 0 ? 6 : jsDay2 - 1
-  const week2 = s.streak.week ? s.streak.week.map((d, i) => (i === tIdx && d.status !== 'done' ? { ...d, status: 'today' } : d)) : s.streak.week
-  return { ...s, sessionDay: today, sessionProgress, streak: { ...streak, week: week2 } }
+  return { ...s, sessionDay: today, sessionProgress, streak }
 }
 
 export function StoreProvider({ children }) {
@@ -155,7 +150,7 @@ export function StoreProvider({ children }) {
 
   // Completes a piece of writing: saves it to the portfolio and (for the daily ritual) awards XP + streak.
   // If replaceId is set (resuming an existing draft), that draft entry is replaced rather than duplicated.
-  const finishWriting = useCallback(({ title, genre, body, isDailySession, replaceId }) => {
+  const finishWriting = useCallback(({ title, genre, body, isDailySession, isTodayExtra, replaceId }) => {
     setState((s) => {
       let profile = s.profile
       let streak = s.streak
@@ -199,16 +194,28 @@ export function StoreProvider({ children }) {
         const marked = markTodayActive(s)
         streak = marked.streak
         s = { ...s, lastActiveDate: marked.lastActiveDate, sessionDay: todayKey() }
-        sessionProgress = { step: 3, completedToday: true }
+        sessionProgress = { step: 3, completedToday: true, practiceDone: false, recap: null }
 
         // mark the lesson today's session was drawn from as done, so tomorrow
-        // advances to the next uncompleted lesson in order
+        // advances to the next uncompleted lesson in order. Pin its recap so the
+        // Today card can show it once the day's practice is also finished.
         const sess = getTodaySession(s, genre)
-        if (sess && sess.lessonId) courses = markLessonDone(courses, sess.lessonId)
+        if (sess && sess.lessonId) {
+          courses = markLessonDone(courses, sess.lessonId)
+          const rich = getLessonBlocks(sess.lessonId)
+          const rc = rich && rich.blocks.find((b) => b.type === 'recap')
+          if (rc) sessionProgress = { ...sessionProgress, recap: { title: sess.title, heading: rc.heading, points: rc.points } }
+        }
 
         // nudge the relevant skill up slightly, capped at 5
         const skillName = genre === 'poem' ? 'Line breaks' : 'Dialogue'
         skills = s.skills.map((sk) => (sk.name === skillName && sk.rating < 5 ? { ...sk, rating: sk.rating + 1 } : sk))
+      }
+
+      // Extra prompt practice done from Today (after the day's session) — saves
+      // the piece (handled above) and flips the day into its recap stage.
+      if (isTodayExtra) {
+        sessionProgress = { ...sessionProgress, practiceDone: true }
       }
 
       return { ...s, portfolio, profile, streak, sessionProgress, stats, skills, courses }
@@ -231,6 +238,10 @@ export function StoreProvider({ children }) {
         : [piece, ...s.portfolio]
       return { ...s, portfolio }
     })
+  }, [])
+
+  const markPracticeDone = useCallback(() => {
+    setState((s) => ({ ...s, sessionProgress: { ...s.sessionProgress, practiceDone: true } }))
   }, [])
 
   const startCourseLesson = useCallback((courseId, lessonId, recap) => {
@@ -299,11 +310,12 @@ export function StoreProvider({ children }) {
       saveDraft,
       finishWriting,
       saveDraftPiece,
+      markPracticeDone,
       startCourseLesson,
       wordsInText,
       linesInText,
     }),
-    [state, completeOnboarding, setTodayGenre, setSessionStep, saveDraft, finishWriting, saveDraftPiece, startCourseLesson]
+    [state, completeOnboarding, setTodayGenre, setSessionStep, saveDraft, finishWriting, saveDraftPiece, markPracticeDone, startCourseLesson]
   )
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
