@@ -45,10 +45,8 @@ export default function App() {
     <StoreProvider>
       <div
         style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'var(--canvas)',
-          overflow: 'hidden',
+          minHeight: "100dvh",
+          background: "var(--canvas)",
         }}
       >
         <AppShell />
